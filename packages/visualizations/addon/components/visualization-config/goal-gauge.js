@@ -10,7 +10,7 @@
  *  }}
  */
 import Component from '@ember/component';
-import { alias } from '@ember/object/computed';
+import { alias, get } from '@ember/object/computed';
 import layout from '../../templates/components/visualization-config/goal-gauge';
 
 export default Component.extend({
@@ -34,7 +34,7 @@ export default Component.extend({
      * @action updateConfig
      */
     updateConfig(type, value) {
-      this.sendAction('onUpdateConfig', { [type]: value });
+      get(this, 'onUpdateConfig')({ [type]: value });
     },
   }
 });

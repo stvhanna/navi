@@ -12,7 +12,7 @@
 import Component from '@ember/component';
 import layout from '../templates/components/number-format-dropdown';
 import { assign } from '@ember/polyfills';
-import { oneWay } from '@ember/object/computed';
+import { get, oneWay } from '@ember/object/computed';
 import { getWithDefault } from '@ember/object';
 
 export default Component.extend({
@@ -33,10 +33,10 @@ export default Component.extend({
      * @action updateColumnNumberFormat
      */
     updateColumnNumberFormat() {
-      let { onUpdateReport, column } = this.attrs,
+      let column = get(this, 'column'),
           format = getWithDefault(this, 'format', column.format);
 
-      onUpdateReport('updateColumn', assign({}, column, { format }));
+      get(this, 'onUpdateReport')('updateColumn', assign({}, column, { format }));
     }
   }
 });

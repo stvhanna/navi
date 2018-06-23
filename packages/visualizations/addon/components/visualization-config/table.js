@@ -69,7 +69,7 @@ export default Component.extend({
      * toggles flag in the visualization config
      */
     onToggleGrandTotal(grandTotal) {
-      this.attrs.onUpdateConfig({ showTotals: { grandTotal }});
+      get(this, 'onUpdateConfig')({ showTotals: { grandTotal }});
     },
 
     /**
@@ -81,12 +81,12 @@ export default Component.extend({
     onToggleSubtotal(val) {
       if(val) {
         let firstDim = get(this, 'subtotalDimensions')[0];
-        this.attrs.onUpdateConfig({ showTotals: { subtotal: get(firstDim, 'name') }});
+        get(this, 'onUpdateConfig')({ showTotals: { subtotal: get(firstDim, 'name') }});
       }
       else if(get(this, 'options.showTotals.subtotal')) {
         let newOptions = copy(get(this, 'options'));
         delete newOptions.showTotals.subtotal;
-        this.attrs.onUpdateConfig(newOptions);
+        get(this, 'onUpdateConfig')(newOptions);
       }
     },
 
@@ -96,7 +96,7 @@ export default Component.extend({
      * set the dimension name as a subtotal in the table config
      */
     updateSubtotal(dimension) {
-      this.attrs.onUpdateConfig({ showTotals: { subtotal: dimension.name }});
+      get(this, 'onUpdateConfig')({ showTotals: { subtotal: dimension.name }});
     }
   }
 });

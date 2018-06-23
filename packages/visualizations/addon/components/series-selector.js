@@ -39,10 +39,15 @@ export default Component.extend(DebouncedPropertiesMixin, {
    */
   classNames: ['series-selector'],
 
-  /**
-   * @property {Array} debouncedProperties - list of properties to debounce
+  /*
+   * @method init
+   * @override
    */
-  debouncedProperties: ['searchTerm'],
+  init() {
+    this._super(...arguments);
+    //list of properties to debounce
+    this.set('debouncedProperties', [ 'searchTerm' ]);
+  },
 
   /**
    * @property {Number} searchTermDelay - number of milliseconds to wait for user to stop typing search term

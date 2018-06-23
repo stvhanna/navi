@@ -39,7 +39,7 @@ export default Component.extend({
     onUpdateConfig(seriesConfig) {
       let newOptions = copy(get(this, 'options'));
       set(newOptions, 'axis.y.series.config', seriesConfig);
-      this.attrs.onUpdateConfig(newOptions);
+      get(this, 'onUpdateConfig')(newOptions);
     }
   }
 });

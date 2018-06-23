@@ -12,7 +12,6 @@
  */
 
 import { assign } from '@ember/polyfills';
-
 import { A } from '@ember/array';
 import Component from '@ember/component';
 import { set, get, computed } from '@ember/object';
@@ -147,7 +146,7 @@ export default Component.extend({
     onUpdateChartMetric(metric) {
       let newSeriesConfig = copy(get(this, 'seriesConfig'));
       set(newSeriesConfig, 'metric', metric);
-      this.sendAction('onUpdateConfig', newSeriesConfig);
+      get(this, 'onUpdateConfig')(newSeriesConfig);
     },
 
     /**
@@ -157,7 +156,7 @@ export default Component.extend({
     onAddSeries(series) {
       let newSeriesConfig = copy(get(this, 'seriesConfig'));
       A(newSeriesConfig.dimensions).pushObject(series.config);
-      this.sendAction('onUpdateConfig', newSeriesConfig);
+      get(this, 'onUpdateConfig')(newSeriesConfig);
     },
 
     /**
@@ -172,7 +171,7 @@ export default Component.extend({
       set(newSeriesConfig, 'dimensions',
         _.reject(seriesInConfig, series.config)
       );
-      this.sendAction('onUpdateConfig', newSeriesConfig);
+      get(this, 'onUpdateConfig')(newSeriesConfig);
     }
   }
 });

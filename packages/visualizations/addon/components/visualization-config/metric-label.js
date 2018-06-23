@@ -11,6 +11,7 @@
  *  }}
  */
 import Component from '@ember/component';
+import { get } from '@ember/object';
 import layout from '../../templates/components/visualization-config/metric-label';
 
 export default Component.extend({
@@ -29,14 +30,14 @@ export default Component.extend({
      * @action updateLabel
      */
     updateLabel(description) {
-      this.sendAction('onUpdateConfig', { description });
+      get(this, 'onUpdateConfig')({ description });
     },
 
     /**
      * @action updateFormat
      */
     updateFormat(format) {
-      this.sendAction('onUpdateConfig', { format });
+      get(this, 'onUpdateConfig')({ format });
     }
   }
 });

@@ -313,7 +313,7 @@ export default Component.extend({
             actionType = direction === 'none' ? 'removeSort' : 'upsertSort',
             fieldName = type === 'dateTime' ? type : canonicalizeMetric(field);
 
-        this.attrs.onUpdateReport(actionType, fieldName, direction);
+        get(this, 'onUpdateReport')(actionType, fieldName, direction);
       }
     },
 
@@ -321,19 +321,14 @@ export default Component.extend({
      * @action updateColumnOrder
      */
     updateColumnOrder(newColumnOrder) {
-      this.attrs.onUpdateReport(
-        'updateColumnOrder',
-        newColumnOrder
-      );
+      get(this, 'onUpdateReport')('updateColumnOrder', newColumnOrder);
     },
 
     /**
      * @action updateColumnDisplayName
      */
     updateColumnDisplayName(column, displayName) {
-      this.attrs.onUpdateReport('updateColumn', assign({}, column, {
-        displayName
-      }));
+      get(this, 'onUpdateReport')('updateColumn', assign({}, column, { displayName }));
     }
   }
 });

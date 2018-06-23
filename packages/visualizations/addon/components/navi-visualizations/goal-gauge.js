@@ -40,6 +40,15 @@ export default Component.extend({
 
   tagName: '',
 
+  /*
+   * @method init
+   * @override
+   */
+  init() {
+    this._super(...arguments);
+    this.set('tooltip', { show: false });
+  },
+
   /**
    * @property {Array} - List of class names added to the gauge component
    */
@@ -109,11 +118,6 @@ export default Component.extend({
    * @property {String} - metric unit
    */
   unit: alias('config.unit'),
-
-  /**
-   * @property {Object} - gauge tooltip configuration
-   */
-  tooltip: { show: false },
 
   /**
    * @property {Object} config - config options for the chart

@@ -65,7 +65,7 @@ export default Component.extend({
       let metrics = A(selectedMetrics).mapBy('name'),
           newConfig = copy(get(this, 'seriesConfig'));
       set(newConfig, 'metrics', metrics);
-      this.sendAction('onUpdateConfig', newConfig);
+      get(this, 'onUpdateConfig')(newConfig);
     },
 
     /**
@@ -78,7 +78,7 @@ export default Component.extend({
           newConfig = copy(get(this, 'seriesConfig'));
 
       set(newConfig, 'metrics', updatedMetrics);
-      this.sendAction('onUpdateConfig', newConfig);
+      get(this, 'onUpdateConfig')(newConfig);
     }
   }
 });
