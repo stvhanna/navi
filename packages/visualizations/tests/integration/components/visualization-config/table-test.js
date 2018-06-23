@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import config from 'ember-get-config';
@@ -12,7 +12,7 @@ moduleForComponent('visualization-config/table', 'Integration | Component | visu
   integration: true,
   beforeEach() {
     this.server = startMirage();
-    return Ember.getOwner(this).lookup('service:bard-metadata').loadMetadata();
+    return getOwner(this).lookup('service:bard-metadata').loadMetadata();
   },
   afterEach() {
     this.server.shutdown();

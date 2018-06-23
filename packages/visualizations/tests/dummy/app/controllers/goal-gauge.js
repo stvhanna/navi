@@ -1,10 +1,10 @@
-import Ember from 'ember';
-
-const { get, set} = Ember;
-export default Ember.Controller.extend({
+import $ from 'jquery';
+import Controller from '@ember/controller';
+import { set, get, computed } from '@ember/object';
+export default Controller.extend({
   request: {},
 
-  response: Ember.computed('model', function() {
+  response: computed('model', function() {
     return this.get('model.0.response.rows');
   }),
 
@@ -14,7 +14,7 @@ export default Ember.Controller.extend({
     goalValue: '3100000000'
   },
 
-  goalGaugeVisualization: Ember.computed('goalGaugeOptions', function() {
+  goalGaugeVisualization: computed('goalGaugeOptions', function() {
     return {
       type: 'goal-gauge',
       version: 1,
@@ -30,7 +30,7 @@ export default Ember.Controller.extend({
     onUpdateConfig(configUpdates) {
       let config = get(this,'goalGaugeOptions');
       set(this, 'goalGaugeOptions',
-        Ember.$.extend(true, {}, config, configUpdates)
+        $.extend(true, {}, config, configUpdates)
       );
     }
   }

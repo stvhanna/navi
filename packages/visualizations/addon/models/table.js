@@ -2,20 +2,16 @@
  * Copyright 2018, Yahoo Holdings Inc.
  * Licensed under the terms of the MIT license. See accompanying LICENSE.md file for terms.
  */
-import Ember from 'ember';
+import { readOnly } from '@ember/object/computed';
+
+import { A as arr } from '@ember/array';
+import { set, get } from '@ember/object';
 import DS from 'ember-data';
 import VisualizationBase from './visualization';
 import { canonicalizeMetric } from 'navi-data/utils/metric';
 import { validator, buildValidations } from 'ember-cp-validations';
 import { metricFormat } from 'navi-data/helpers/metric-format';
 import keyBy from 'lodash/keyBy';
-
-const {
-  A:arr,
-  computed,
-  get,
-  set
-} = Ember;
 
 /**
  * @constant {Object} Validations - Validation object
@@ -32,7 +28,7 @@ const Validations = buildValidations({
   }),
 }, {
   //Global Validation Options
-  request: computed.readOnly('model._request')
+  request: readOnly('model._request')
 });
 
 export default VisualizationBase.extend(Validations, {

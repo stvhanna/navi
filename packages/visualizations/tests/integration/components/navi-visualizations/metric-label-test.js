@@ -1,7 +1,7 @@
+import { A } from '@ember/array';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import { set } from '@ember/object';
-import Ember from 'ember';
 
 moduleForComponent('navi-visualizations/metric-label', 'Integration | Component | navi-visualization/metric-label', {
   integration: true
@@ -83,7 +83,7 @@ test('metric label renders formatted string when format not null', function(asse
  * @return {Void}
  */
 function _setModel(context, row) {
-  context.set('model', Ember.A([
+  context.set('model', A([
     { response: { rows: [ row ] } }
   ]));
 }

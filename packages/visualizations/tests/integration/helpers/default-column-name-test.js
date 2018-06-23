@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import { startMirage } from 'dummy/initializers/ember-cli-mirage';
@@ -8,7 +8,7 @@ moduleForComponent('default-column-name', 'helper:default-column-name', {
   beforeEach() {
     this.server = startMirage();
 
-    return Ember.getOwner(this).lookup('service:bard-metadata').loadMetadata();
+    return getOwner(this).lookup('service:bard-metadata').loadMetadata();
   },
   afterEach() {
     this.server.shutdown();

@@ -1,10 +1,9 @@
+import EmberObject, { get } from '@ember/object';
 import { test, module } from 'ember-qunit';
-import Ember from 'ember';
 import BuilderClass from 'navi-visualizations/chart-builders/date-time';
 import TooltipTemplate from '../../../../navi-visualizations/templates/chart-tooltips/date';
 
 const DateChartBuilder = BuilderClass.create();
-const { get } = Ember;
 
 module('Unit | Utils | Chart Builder Date Time');
 
@@ -395,7 +394,7 @@ test('buildTooltip', function(assert) {
       }],
       data = DateChartBuilder.buildData(response, config, request),
       mixin = DateChartBuilder.buildTooltip(data, config, request),
-      tooltipClass = Ember.Object.extend(mixin, {}),
+      tooltipClass = EmberObject.extend(mixin, {}),
       tooltip = tooltipClass.create({config, request, tooltipData, x});
 
   assert.equal(get(tooltip, 'layout'),

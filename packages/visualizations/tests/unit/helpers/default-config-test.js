@@ -1,6 +1,6 @@
+import { run } from '@ember/runloop';
 import { buildTestRequest } from '../../helpers/request';
 import { moduleFor, test } from 'ember-qunit';
-import Ember from 'ember';
 
 moduleFor('helper:default-config', 'Unit | Helper | default config', {
   needs: [
@@ -16,7 +16,7 @@ test('default config', function(assert) {
         { rupees: 999, hp: 0 }
       ],
       request = buildTestRequest([{metric: 'rupees', parameters: {}}, {metric: 'hp', parameters: {}}], []),
-      generatedConfig = Ember.run(
+      generatedConfig = run(
         () => helper.compute(['metric-label', request, { rows }])
       );
 

@@ -1,5 +1,10 @@
 import { test, module } from 'ember-qunit';
-import { topN, mostRecentData, dataByDimensions, maxDataByDimensions } from 'navi-visualizations/utils/data';
+import {
+  topN,
+  mostRecentData,
+  dataByDimensions,
+  maxDataByDimensions
+} from 'navi-visualizations/utils/data';
 
 module('Unit | Utils | Data');
 

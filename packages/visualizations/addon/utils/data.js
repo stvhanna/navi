@@ -2,8 +2,8 @@
  * Copyright 2017, Yahoo Holdings Inc.
  * Licensed under the terms of the MIT license. See accompanying LICENSE.md file for terms.
  */
+import { get } from '@ember/object';
 import DataGroup from 'navi-core/utils/classes/data-group';
-import Ember from 'ember';
 import { maxBy } from 'lodash';
 
 /**
@@ -18,7 +18,7 @@ import { maxBy } from 'lodash';
  */
 export function topN(rows, metric, n) {
   let sortedRows = rows.sort((a, b) =>
-    Number(Ember.get(b, metric)) - Number(Ember.get(a, metric))
+    Number(get(b, metric)) - Number(get(a, metric))
   );
 
   return sortedRows.slice(0, n);

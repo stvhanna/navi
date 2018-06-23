@@ -1,7 +1,9 @@
-import Ember from 'ember';
-const { get, set } = Ember;
+import $ from 'jquery';
+import { A } from '@ember/array';
+import Controller from '@ember/controller';
+import { set, get, computed } from '@ember/object';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
 
   request: {
     dimensions: [{
@@ -41,7 +43,7 @@ export default Ember.Controller.extend({
     ]
   },
 
-  response: Ember.computed('model', function() {
+  response: computed('model', function() {
     return this.get('model.0.response.rows');
   }),
 
@@ -78,15 +80,15 @@ export default Ember.Controller.extend({
     }
   },
 
-  visualizationOptions: Ember.computed('options', function() {
+  visualizationOptions: computed('options', function() {
     return {
       type: 'pie-chart',
       version: 1,
-      metadata: Ember.get(this, 'options')
+      metadata: get(this, 'options')
     };
   }),
 
-  multiDimensionModel: Ember.A([
+  multiDimensionModel: A([
     {
       request: {
         metrics: [
@@ -228,7 +230,7 @@ export default Ember.Controller.extend({
     ]
   },
 
-  multiDimensionResponse: Ember.computed('multiDimensionModel', function() {
+  multiDimensionResponse: computed('multiDimensionModel', function() {
     return this.get('multiDimensionModel.0.response.rows');
   }),
 
@@ -268,11 +270,11 @@ export default Ember.Controller.extend({
     }
   },
 
-  visualizationOptionsMultiDimension: Ember.computed('multiDimensionOptions', function() {
+  visualizationOptionsMultiDimension: computed('multiDimensionOptions', function() {
     return {
       type: 'pie-chart',
       version: 1,
-      metadata: Ember.get(this, 'multiDimensionOptions')
+      metadata: get(this, 'multiDimensionOptions')
     };
   }),
 
@@ -280,13 +282,13 @@ export default Ember.Controller.extend({
     onUpdateConfigOneDimension(configUpdates) {
       let options = get(this,'options');
       set(this, 'options',
-        Ember.$.extend(true, {}, options, configUpdates)
+        $.extend(true, {}, options, configUpdates)
       );
     },
     onUpdateConfigMultipleDimension(configUpdates) {
       let multiDimensionOptions = get(this,'multiDimensionOptions');
       set(this, 'multiDimensionOptions',
-        Ember.$.extend(true, {}, multiDimensionOptions, configUpdates)
+        $.extend(true, {}, multiDimensionOptions, configUpdates)
       );
     }
   }

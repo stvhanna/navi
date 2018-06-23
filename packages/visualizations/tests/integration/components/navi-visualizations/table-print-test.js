@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
+import { A } from '@ember/array';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import { startMirage } from 'dummy/initializers/ember-cli-mirage';
@@ -34,7 +35,7 @@ const ROWS = [
   },
 ];
 
-const Model = Ember.A([{
+const Model = A([{
   request: {
     dimensions: [ {dimension:'os'} ],
     metrics: [
@@ -87,7 +88,7 @@ moduleForComponent('navi-visualizations/table-print', 'Integration | Component |
     this.set('options', Options);
     this.set('onUpdateReport', () => {});
 
-    return Ember.getOwner(this).lookup('service:bard-metadata').loadMetadata();
+    return getOwner(this).lookup('service:bard-metadata').loadMetadata();
   },
   afterEach() {
     this.server.shutdown();

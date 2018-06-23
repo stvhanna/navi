@@ -1,8 +1,10 @@
-import Ember from 'ember';
+import { set } from '@ember/object';
+import { A } from '@ember/array';
+import { helper as buildHelper } from '@ember/component/helper';
+import Component from '@ember/component';
+import { getOwner } from '@ember/application';
 import { moduleForComponent, test } from 'ember-qunit';
 import { setupMock, teardownMock } from '../../../helpers/mirage-helper';
-
-const { getOwner } = Ember;
 
 moduleForComponent('navi-visualizations/table', 'Unit | Component | table', {
   unit: 'true',
@@ -29,18 +31,18 @@ moduleForComponent('navi-visualizations/table', 'Unit | Component | table', {
     'serializer:bard-metadata'
   ],
   beforeEach() {
-    this.register('component:navi-table-sort-icon', Ember.Component.extend(), {instantiate: false});
-    this.register('component:sortable-group', Ember.Component.extend(), {instantiate: false});
-    this.register('component:sortable-item', Ember.Component.extend(), {instantiate: false});
-    this.register('component:navi-icon', Ember.Component.extend(), {instantiate: false});
-    this.register('component:tooltip-on-element', Ember.Component.extend(), {instantiate: false});
+    this.register('component:navi-table-sort-icon', Component.extend(), {instantiate: false});
+    this.register('component:sortable-group', Component.extend(), {instantiate: false});
+    this.register('component:sortable-item', Component.extend(), {instantiate: false});
+    this.register('component:navi-icon', Component.extend(), {instantiate: false});
+    this.register('component:tooltip-on-element', Component.extend(), {instantiate: false});
 
     //helpers
-    this.register('helper:and', Ember.Helper.helper(()=>{}), {instantiate: false});
-    this.register('helper:sub', Ember.Helper.helper(()=>{}), {instantiate: false});
-    this.register('helper:not-eq', Ember.Helper.helper(()=>{}), {instantiate: false});
-    this.register('helper:is-valid-moment', Ember.Helper.helper(()=>{}), {instantiate: false});
-    this.register('helper:format-number', Ember.Helper.helper(()=>{}), {instantiate: false});
+    this.register('helper:and', buildHelper(()=>{}), {instantiate: false});
+    this.register('helper:sub', buildHelper(()=>{}), {instantiate: false});
+    this.register('helper:not-eq', buildHelper(()=>{}), {instantiate: false});
+    this.register('helper:is-valid-moment', buildHelper(()=>{}), {instantiate: false});
+    this.register('helper:format-number', buildHelper(()=>{}), {instantiate: false});
 
     setupMock()
     return getOwner(this).lookup('service:bard-metadata').loadMetadata();
@@ -56,7 +58,7 @@ const ROWS = [
   { 'dateTime': '2016-05-31 00:00:00.000', 'dimension|id': 'dim2', 'uniqueIdentifier': 183206656 }
 ];
 
-const MODEL = Ember.A([{
+const MODEL = A([{
   request: {
     metrics: [ { metric: 'uniqueIdentifier' , parameters: {}, toJSON() { return { metric: 'uniqueIdentifier', parameters: {}};} } ],
     logicalTable: { table: 'network', timeGrain: 'day' },
@@ -82,9 +84,9 @@ test('columns', function(assert) {
         model: MODEL,
         options: OPTIONS
       }),
-      dateTimeColumn = Ember.A(component.get('columns')).filterBy('type', 'dateTime')[0],
-      metricColumn = Ember.A(component.get('columns')).filterBy('type', 'metric')[0],
-      thresholdColumn = Ember.A(component.get('columns')).filterBy('type', 'threshold')[0];
+      dateTimeColumn = A(component.get('columns')).filterBy('type', 'dateTime')[0],
+      metricColumn = A(component.get('columns')).filterBy('type', 'metric')[0],
+      thresholdColumn = A(component.get('columns')).filterBy('type', 'threshold')[0];
 
   assert.equal(dateTimeColumn.sortDirection,
     'desc',
@@ -150,7 +152,7 @@ test('table data changes with options', function(assert) {
     ROWS,
     'table data is the same as the response rows when the flag in the options is not set');
 
-  Ember.set(OPTIONS, 'showTotals', { grandTotal: true });
+  set(OPTIONS, 'showTotals', { grandTotal: true });
 
   assert.deepEqual(component.get('tableData')[component.get('tableData.length') - 1], {
     dateTime: 'Grand Total',
@@ -160,7 +162,7 @@ test('table data changes with options', function(assert) {
     uniqueIdentifier: 356140444
   }, 'table data has the total row appended when the flag in the options is set');
 
-  Ember.set(OPTIONS, 'showTotals', { subtotal: 'dimension' });
+  set(OPTIONS, 'showTotals', { subtotal: 'dimension' });
 
   assert.deepEqual(component.get('tableData'), [
     {
@@ -189,7 +191,7 @@ test('table data changes with options', function(assert) {
     }
   ], 'table data has the subtotal row appended after every group of data');
 
-  Ember.set(OPTIONS, 'showTotals', { subtotal: 'dimension', grandTotal: true });
+  set(OPTIONS, 'showTotals', { subtotal: 'dimension', grandTotal: true });
 
   assert.deepEqual(component.get('tableData'), [
     {
@@ -230,7 +232,7 @@ test('computeTotal and computeSubtotals', function(assert) {
   assert.expect(2);
 
   let options = $.extend(true, {}, OPTIONS, { showTotals: { subtotal: 'dimension' }}),
-      component = this.subject({ options, model: Ember.A([{ response: { rows: ROWS } }]) });
+      component = this.subject({ options, model: A([{ response: { rows: ROWS } }]) });
 
   assert.deepEqual(component._computeSubtotals(), [{
     'dateTime': '2016-05-30 00:00:00.000',

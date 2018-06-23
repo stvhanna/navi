@@ -1,10 +1,9 @@
+import EmberObject, { get } from '@ember/object';
 import { test, module } from 'ember-qunit';
-import Ember from 'ember';
 import BuilderClass from 'navi-visualizations/chart-builders/dimension';
 import TooltipTemplate from '../../../../navi-visualizations/templates/chart-tooltips/dimension';
 
 const DimensionChartBuilder = BuilderClass.create();
-const { get } = Ember;
 
 const DATA = [
   {
@@ -567,7 +566,7 @@ test('buildTooltip', function(assert) {
   DimensionChartBuilder.buildData(DATA, config, REQUEST);
 
   let mixin = DimensionChartBuilder.buildTooltip(DATA, config, REQUEST),
-      tooltipClass = Ember.Object.extend(mixin, {}),
+      tooltipClass = EmberObject.extend(mixin, {}),
       tooltip = tooltipClass.create({config, REQUEST, tooltipData, x});
 
   assert.equal(get(tooltip, 'layout'),

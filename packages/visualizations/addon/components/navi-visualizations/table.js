@@ -11,6 +11,8 @@
  * }}
  */
 
+import { readOnly, alias } from '@ember/object/computed';
+
 import layout from '../../templates/components/navi-visualizations/table';
 import { formatItemDimension } from '../../helpers/mixed-height-layout';
 import { computed, get, set } from '@ember/object';
@@ -56,22 +58,22 @@ export default Component.extend({
   /**
    * @property {String} selectedSubtotal
    */
-  selectedSubtotal: computed.readOnly('options.showTotals.subtotal'),
+  selectedSubtotal: readOnly('options.showTotals.subtotal'),
 
   /**
    * @property {Array} rawData - data from the WS
    */
-  rawData: computed.readOnly('model.firstObject.response.rows'),
+  rawData: readOnly('model.firstObject.response.rows'),
 
   /**
    * @property {Number} totalRows - total rows for the request
    */
-  totalRows: computed.readOnly('model.firstObject.response.meta.pagination.numberOfResults'),
+  totalRows: readOnly('model.firstObject.response.meta.pagination.numberOfResults'),
 
   /**
    * @property {Number} rowsInResponse - rows in response
    */
-  rowsInResponse: computed.alias('model.firstObject.response.rows.length'),
+  rowsInResponse: alias('model.firstObject.response.rows.length'),
 
   /**
    * @method _computeTotal
@@ -250,7 +252,7 @@ export default Component.extend({
   /**
    * @property {Object} request
    */
-  request: computed.alias('model.firstObject.request'),
+  request: alias('model.firstObject.request'),
 
   /**
    * @property {String} cellRendererPrefix - prefix for all cell renderer types

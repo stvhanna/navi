@@ -22,19 +22,23 @@
  *    }
  *}
  */
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+
+import EmberObject, { set, get, computed } from '@ember/object';
 import moment from 'moment';
 import DataGroup from 'navi-core/utils/classes/data-group';
 import Interval from 'navi-core/utils/classes/interval';
 import DateUtils from 'navi-core/utils/date';
 import tooltipLayout from '../templates/chart-tooltips/dimension';
 import ChartAxisDateTimeFormats from 'navi-visualizations/utils/chart-axis-date-time-formats';
-import { groupDataByDimensions, buildSeriesKey, getSeriesName } from 'navi-visualizations/utils/chart-data';
+import {
+  groupDataByDimensions,
+  buildSeriesKey,
+  getSeriesName
+} from 'navi-visualizations/utils/chart-data';
 import { canonicalizeMetric } from 'navi-data/utils/metric';
 
-const { get, set } = Ember;
-
-export default Ember.Object.extend({
+export default EmberObject.extend({
 
   /**
    * @method getSeriesName
@@ -139,13 +143,13 @@ export default Ember.Object.extend({
   buildTooltip() {
     let byXSeries = get(this, 'byXSeries');
 
-    return Ember.Mixin.create({
+    return Mixin.create({
       layout: tooltipLayout,
 
       /**
        * @property {Object[]} rowData - maps a response row to each series in a tooltip
        */
-      rowData: Ember.computed('x', 'tooltipData', function() {
+      rowData: computed('x', 'tooltipData', function() {
         return get(this, 'tooltipData').map(series => {
           // Get the full data for this combination of x + series
           let dataForSeries = byXSeries.getDataForKey(get(this, 'x') + series.id) || [];

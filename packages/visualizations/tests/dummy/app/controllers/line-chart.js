@@ -1,7 +1,9 @@
-import Ember from 'ember';
-
-const { get, set } = Ember;
-export default Ember.Controller.extend({
+import $ from 'jquery';
+import { Promise } from 'rsvp';
+import { A } from '@ember/array';
+import Controller from '@ember/controller';
+import { set, get, computed } from '@ember/object';
+export default Controller.extend({
   chartType: 'line-chart',
 
   //options passed through to the line-chart component
@@ -34,7 +36,7 @@ export default Ember.Controller.extend({
     ]
   },
 
-  response: Ember.computed('model', function() {
+  response: computed('model', function() {
     return this.get('model.0.response.rows');
   }),
 
@@ -106,19 +108,19 @@ export default Ember.Controller.extend({
     }
   },
 
-  metricVisualization: Ember.computed('metricOptions', function() {
+  metricVisualization: computed('metricOptions', function() {
     return {
       type: get(this, 'chartType'),
       version: 1,
-      metadata: Ember.get(this, 'metricOptions')
+      metadata: get(this, 'metricOptions')
     };
   }),
 
-  dimVisualization: Ember.computed('dimensionOptions', function() {
+  dimVisualization: computed('dimensionOptions', function() {
     return {
       type: get(this, 'chartType'),
       version: 1,
-      metadata: Ember.get(this, 'dimensionOptions')
+      metadata: get(this, 'dimensionOptions')
     };
   }),
 
@@ -146,7 +148,7 @@ export default Ember.Controller.extend({
     }
   },
 
-  dimensionModel: Ember.A([
+  dimensionModel: A([
     {
       request: {
         metrics: [
@@ -211,7 +213,7 @@ export default Ember.Controller.extend({
     }
   ]),
 
-  hourGrainModel: Ember.A([
+  hourGrainModel: A([
     {
       request: {
         metrics: [
@@ -294,7 +296,7 @@ export default Ember.Controller.extend({
     }
   },
 
-  minuteGrainModel: Ember.A([
+  minuteGrainModel: A([
     {
       request: {
         metrics: [
@@ -358,7 +360,7 @@ export default Ember.Controller.extend({
     }
   },
 
-  secondGrainModel: Ember.A([
+  secondGrainModel: A([
     {
       request: {
         metrics: [
@@ -426,7 +428,7 @@ export default Ember.Controller.extend({
     }
   },
 
-  anomalousDataModel: Ember.A([
+  anomalousDataModel: A([
     {
       request: {
         metrics: [
@@ -479,8 +481,8 @@ export default Ember.Controller.extend({
         ]
       }
     },
-    new Ember.RSVP.Promise((resolve) => {
-      resolve(Ember.A([
+    new Promise((resolve) => {
+      resolve(A([
         {
           index: 1,
           actual: 12,
@@ -520,7 +522,7 @@ export default Ember.Controller.extend({
     onUpdateConfig(configUpdates) {
       let config = get(this,'dimensionOptions');
       set(this, 'dimensionOptions',
-        Ember.$.extend(true, {}, config, configUpdates)
+        $.extend(true, {}, config, configUpdates)
       );
     }
   }

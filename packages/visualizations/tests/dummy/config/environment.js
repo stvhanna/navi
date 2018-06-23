@@ -48,6 +48,7 @@ module.exports = function(environment) {
     // here you can enable a production-specific feature
 
     ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.autoboot = false;
   }
 
   if (environment === 'production') {

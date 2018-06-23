@@ -10,8 +10,8 @@
  *  }}
  */
 import Component from '@ember/component';
+import { alias } from '@ember/object/computed';
 import layout from '../../templates/components/visualization-config/goal-gauge';
-import { computed } from '@ember/object';
 
 export default Component.extend({
   /**
@@ -27,7 +27,7 @@ export default Component.extend({
   /**
    * @property {object} metric fragment
    */
-  metricModel: computed.alias('request.metrics.firstObject'),
+  metricModel: alias('request.metrics.firstObject'),
 
   actions: {
     /**

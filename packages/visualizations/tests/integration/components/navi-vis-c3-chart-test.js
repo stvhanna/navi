@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import { next, run } from '@ember/runloop';
+import Component from '@ember/component';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import { initialize as injectC3Enhancements } from 'navi-visualizations/initializers/inject-c3-enhancements';
@@ -12,7 +13,7 @@ moduleForComponent('navi-vis-c3-chart', 'Integration | Component | navi vis c3 c
 
 test('resize', function(assert) {
 
-  let testContainer = Ember.Component.extend({
+  let testContainer = Component.extend({
     classNames: ['test-container'],
     layout: hbs`{{yield this}}`
   });
@@ -41,14 +42,14 @@ test('resize', function(assert) {
   `);
 
 
-  Ember.run.next(() => {
+  next(() => {
     assert.equal(this.$('svg').css('height'),
       '100px',
       'chart fills height of container on initial render');
 
     this.$('.container').css('height', '200px');
 
-    Ember.run(() => {
+    run(() => {
       this.$('.test-container').trigger('resizestop');
     });
 
@@ -75,7 +76,7 @@ test('series classes', function(assert) {
     }}
   `);
 
-  Ember.run.next(() => {
+  next(() => {
     assert.ok(this.$('.c3-chart-line:eq(0)').is('.chart-series-0'),
       'Each chart series has a corresponding class applied');
 

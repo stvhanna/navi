@@ -1,14 +1,14 @@
-import Ember from 'ember';
+import { Promise } from 'rsvp';
+import { A } from '@ember/array';
+import { getOwner } from '@ember/application';
 import moment from 'moment';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
-import { initialize as injectC3Enhancements} from 'navi-visualizations/initializers/inject-c3-enhancements';
+import { initialize as injectC3Enhancements } from 'navi-visualizations/initializers/inject-c3-enhancements';
 import DateUtils from 'navi-core/utils/date';
 import { setupMock, teardownMock } from '../../../helpers/mirage-helper';
 
 let MetadataService;
-
-const { getOwner } = Ember;
 
 const TEMPLATE = hbs`
   {{navi-visualizations/line-chart
@@ -16,7 +16,7 @@ const TEMPLATE = hbs`
     options=options
   }}`;
 
-const Model = Ember.A([{
+const Model = A([{
   request: {
     metrics: [
       'uniqueIdentifier', 'totalPageViews', 'revenue(currency=USD)'
@@ -117,7 +117,7 @@ test('it renders', function(assert) {
 test('missing data - metrics', function(assert) {
   assert.expect(1);
 
-  this.set('model', Ember.A([{
+  this.set('model', A([{
     request: {
       metrics: [
         'uniqueIdentifier'
@@ -184,7 +184,7 @@ test('missing data - dimensions', function(assert) {
     }
   });
 
-  this.set('model', Ember.A([{
+  this.set('model', A([{
     request: {
       metrics: [
         'uniqueIdentifier'
@@ -403,7 +403,7 @@ test('y axis label', function(assert) {
 test('Highlight data points', function(assert) {
   // assert.expect(1);
 
-  let anomalousDataModel = Ember.A([
+  let anomalousDataModel = A([
     {
       request: {
         metrics: [
@@ -452,8 +452,8 @@ test('Highlight data points', function(assert) {
         ]
       }
     },
-    new Ember.RSVP.Promise((resolve) => {
-      resolve(Ember.A([
+    new Promise((resolve) => {
+      resolve(A([
         {
           index: 1,
           actual: 12,
@@ -519,7 +519,7 @@ test('dateTime model', function (assert) {
     current.add(1, 'month');
   }
 
-  this.set('model', Ember.A([{
+  this.set('model', A([{
     request: {
       metrics: [
         'uniqueIdentifier'

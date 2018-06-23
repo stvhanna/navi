@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import { getOwner } from '@ember/application';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import { initialize as injectC3Enhancements } from 'navi-visualizations/initializers/inject-c3-enhancements';
@@ -6,15 +7,13 @@ import { setupMock, teardownMock } from '../../../helpers/mirage-helper';
 
 let MetadataService;
 
-const { getOwner } = Ember;
-
 const TEMPLATE = hbs`
   {{navi-visualizations/bar-chart
     model=model
     options=options
   }}`;
 
-const Model = Ember.A([{
+const Model = A([{
   request: {
     metrics: [
       {metric: 'uniqueIdentifier', parameters: {}, canonicalName: 'uniqueIdentifier', toJSON() { return this; }}
@@ -60,7 +59,7 @@ const Model = Ember.A([{
   }
 }]);
 
-const DimensionModel = Ember.A([
+const DimensionModel = A([
   {
     request: {
       metrics: [

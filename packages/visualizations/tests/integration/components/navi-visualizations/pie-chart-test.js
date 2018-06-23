@@ -1,7 +1,8 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
+import { A } from '@ember/array';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
-import { initialize as injectC3Enhancements} from 'navi-visualizations/initializers/inject-c3-enhancements';
+import { initialize as injectC3Enhancements } from 'navi-visualizations/initializers/inject-c3-enhancements';
 import { setupMock, teardownMock } from '../../../helpers/mirage-helper';
 
 const TEMPLATE = hbs`
@@ -10,7 +11,7 @@ const TEMPLATE = hbs`
         options=options
     }}`;
 
-const Model = Ember.A([{
+const Model = A([{
   request: {
     logicalTable: {
       timeGrain: {
@@ -98,7 +99,7 @@ moduleForComponent('navi-visualizations/pie-chart', 'Integration | Component | p
     injectC3Enhancements();
     this.set('model', Model);
     setupMock();
-    MetadataService = Ember.getOwner(this).lookup('service:bard-metadata');
+    MetadataService = getOwner(this).lookup('service:bard-metadata');
     return MetadataService.loadMetadata();
   },
   afterEach() {

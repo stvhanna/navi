@@ -11,14 +11,17 @@
 
 /* global requirejs */
 
-import Ember from 'ember';
+import { run } from '@ember/runloop';
+
+import { camelize } from '@ember/string';
+import Component from '@ember/component';
+import { get, computed } from '@ember/object';
+import { getOwner } from '@ember/application';
 import layout from '../../templates/components/navi-visualizations/line-chart';
 import numeral from 'numeral';
 import config from 'ember-get-config';
 import { inject as service } from '@ember/service';
 import $ from 'jquery';
-
-const { computed, get, getOwner } = Ember;
 
 const DEFAULT_OPTIONS = {
   axis: {
@@ -57,7 +60,7 @@ const DEFAULT_OPTIONS = {
   }
 };
 
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
 
   /**
@@ -90,7 +93,7 @@ export default Ember.Component.extend({
         chartBuilderEntries = Object.keys(requirejs.entries).filter((key) => builderRegExp.test(key)),
         owner = getOwner(this),
         builderMap = chartBuilderEntries.reduce((map, builderName) => {
-          let builderKey = Ember.String.camelize(builderRegExp.exec(builderName)[1]);
+          let builderKey = camelize(builderRegExp.exec(builderName)[1]);
 
           map[builderKey] = owner.lookup(`chart-builder:${builderKey}`);
           return map;
@@ -215,7 +218,7 @@ export default Ember.Component.extend({
         seriesConfig = get(this, 'seriesConfig.config'),
         builder = get(this, 'builder'),
         owner = getOwner(this),
-        tooltipComponent = Ember.Component.extend(
+        tooltipComponent = Component.extend(
           owner.ownerInjection(),
           builder.buildTooltip(seriesConfig, request),
           { renderer: owner.lookup('renderer:-dom') }
@@ -247,7 +250,7 @@ export default Ember.Component.extend({
               seriesConfig
             });
 
-        Ember.run(() => {
+        run(() => {
           let element = document.createElement('div');
           tooltip.appendTo(element);
         });

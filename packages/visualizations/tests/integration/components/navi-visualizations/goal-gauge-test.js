@@ -2,7 +2,7 @@ import { A as arr } from '@ember/array';
 import { getOwner } from '@ember/application';
 import { set } from '@ember/object';
 import { moduleForComponent, test } from 'ember-qunit';
-import { initialize as injectC3Enhancements} from 'navi-visualizations/initializers/inject-c3-enhancements';
+import { initialize as injectC3Enhancements } from 'navi-visualizations/initializers/inject-c3-enhancements';
 import hbs from 'htmlbars-inline-precompile';
 import { startMirage } from 'dummy/initializers/ember-cli-mirage';
 

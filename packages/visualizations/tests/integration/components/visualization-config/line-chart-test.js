@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
+import Component from '@ember/component';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
@@ -24,7 +25,7 @@ moduleForComponent('visualization-config/line-chart', 'Integration | Component |
   beforeEach() {
     //mocking line chart type component
     this.register('component:visualization-config/chart-type/mock',
-      Ember.Component.extend({
+      Component.extend({
         classNames: [ 'mock' ],
         click(){
           this.sendAction('onUpdateConfig', chartOptions);
@@ -57,7 +58,7 @@ test('onUpdateConfig', function(assert) {
 
   this.render(Template);
 
-  Ember.run(() => {
+  run(() => {
     this.$('.mock').click();
   });
 });

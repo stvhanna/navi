@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
+import { A as arr } from '@ember/array';
+import { setProperties, set, get, computed } from '@ember/object';
 import isEqual from 'lodash/isEqual';
 
-const { A: arr, computed, get, set, setProperties } = Ember;
-
-export default Ember.Controller.extend({
+export default Controller.extend({
   request: {
     dimensions: [
       { dimension: { name: 'os', longName: 'Operating System' } }

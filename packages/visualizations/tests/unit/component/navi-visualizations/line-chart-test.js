@@ -1,10 +1,10 @@
-import Ember from 'ember';
+import { Promise } from 'rsvp';
+import { A } from '@ember/array';
+import { getOwner } from '@ember/application';
 import { moduleForComponent, test } from 'ember-qunit';
 import moment from 'moment';
 import { setupMock, teardownMock } from '../../../helpers/mirage-helper';
 import $ from 'jquery';
-
-const { getOwner } = Ember;
 
 let MetadataService;
 
@@ -88,7 +88,7 @@ test('dataConfig', function(assert) {
   let component = this.subject(),
       model = { request, response };
 
-  component.set('model', Ember.A([ model ]));
+  component.set('model', A([ model ]));
   component.set('options', {
     axis: {
       y: {
@@ -154,8 +154,8 @@ test('dataSelectionConfig', function(assert) {
   assert.expect(2);
 
   let component = this.subject(),
-      insightsDataPromise = new Ember.RSVP.Promise((resolve) => {
-        resolve(Ember.A([
+      insightsDataPromise = new Promise((resolve) => {
+        resolve(A([
           {
             index: 1,
             actual: 12,
@@ -165,7 +165,7 @@ test('dataSelectionConfig', function(assert) {
         ]));
       });
 
-  component.set('model', Ember.A([ {}, insightsDataPromise ]));
+  component.set('model', A([ {}, insightsDataPromise ]));
 
   assert.ok(component.get('dataSelectionConfig').then,
     'Data selection config returns a promise as expected');
@@ -182,7 +182,7 @@ test('config', function(assert){
 
   let component = this.subject({
         dataConfig: {}, // dataConfig has a seperate test
-        model: Ember.A([ { response: { rows: [] } }])
+        model: A([ { response: { rows: [] } }])
       }),
       defaultConfig = {
         axis: {
@@ -288,7 +288,7 @@ test('config', function(assert){
 test('single data point', function(assert) {
   assert.expect(2);
 
-  let model = Ember.A([{
+  let model = A([{
         request: {
           metrics: [
             'uniqueIdentifier'
@@ -336,7 +336,7 @@ test('single data point', function(assert) {
     }
   }, 'the point radius is 2 for a single data point');
 
-  component.set('model',  Ember.A([{
+  component.set('model',  A([{
     request: {
       metrics: [
         'uniqueIdentifier'
