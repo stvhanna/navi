@@ -5,15 +5,15 @@ import hbs from 'htmlbars-inline-precompile';
 import $ from 'jquery';
 
 const TEMPLATE = hbs`
-        {{series-selector
-            availableSeriesData=availableSeriesData
-            seriesDimensions=seriesDimensions
-            selectionIndex=14
-            searchTermDelay=0
-            disableAdd=disableAdd
-            addSeries=(action addSeries)
-        }}
-    `;
+    {{series-selector
+        availableSeriesData=availableSeriesData
+        seriesDimensions=seriesDimensions
+        selectionIndex=14
+        searchTermDelay=0
+        disableAdd=disableAdd
+        addSeries=(action addSeries)
+    }}
+`;
 
 const AVAILABLE_SERIES_DATA = A([{
   searchKey: '10 10 - 20 safari_mobile Safari Mobile',
@@ -76,7 +76,7 @@ test('It renders correctly', function(assert) {
   $('.add-series .btn-add').click();
 
   let header = $('.table-header .table-cell:not(.table-cell--icon)').toArray().map((el) =>  {
-    return $(el).text().trim();
+    return el.textContent.trim();
   });
 
   assert.deepEqual(header, [
@@ -85,7 +85,7 @@ test('It renders correctly', function(assert) {
   ], 'table header is correctly displayed based on seriesDimensions');
 
   let body = $('.table-body .table-cell:not(.table-cell--icon)').toArray().map((el) =>  {
-    return $(el).text().trim();
+    return el.textContent.trim();
   });
 
   assert.deepEqual(body, [
@@ -110,7 +110,7 @@ test('No available series', function(assert) {
   $('.add-series .btn-add').click();
 
   let body = $('.table-body .table-cell').toArray().map((el) =>  {
-    return $(el).text().trim();
+    return el.textContent.trim();
   });
 
   assert.deepEqual(body, [
@@ -165,9 +165,7 @@ test('Searching', function(assert) {
     this.$('.search input').val('30').trigger('input').change();
   });
 
-  let body = $('.table-body .table-cell:not(.table-cell--icon)').toArray().map((el) =>  {
-    return $(el).text().trim();
-  });
+  let body = $('.table-body .table-cell:not(.table-cell--icon)').toArray().map((el) => el.textContent.trim());
 
   assert.deepEqual(body, [
     "20 - 30 (20)", "Chrome (chrome)",

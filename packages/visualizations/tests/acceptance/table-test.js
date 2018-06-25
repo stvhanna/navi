@@ -10,7 +10,7 @@ test('visiting /table', function(assert) {
   visit('/table');
 
   andThen(function() {
-    assert.deepEqual(find('.table-header-cell__title').toArray().map(el => $(el).text().trim()),[
+    assert.deepEqual(find('.table-header-cell__title').toArray().map(el => el.textContent.trim()),[
       'Date',
       'Operating System',
       'Unique Identifiers',
@@ -32,7 +32,7 @@ test('visiting /table', function(assert) {
   });
 
   andThen(() => {
-    assert.deepEqual(find('.table-header-cell__title').toArray().map(el => $(el).text().trim()),[
+    assert.deepEqual(find('.table-header-cell__title').toArray().map(el => el.textContent.trim()),[
       'Operating System',
       'Date',
       'Unique Identifiers',
@@ -62,7 +62,7 @@ test('toggle table editing', function(assert) {
 
     clickTrigger();
     andThen(function() {
-      assert.ok($('.number-format-dropdown__container').is(':visible'), 'Table format dropdown should be visible');
+      assert.ok(find('.number-format-dropdown__container').is(':visible'), 'Table format dropdown should be visible');
     });
   });
 });

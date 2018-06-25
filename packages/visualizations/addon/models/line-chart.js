@@ -71,7 +71,7 @@ const Validations = buildValidations({
     })
   ]}, {
   //Global Validation Options
-  chartType: computed('model._request.{ dimensions.[], metrics.[], intervals.firstObject.interval }', function() {
+  chartType: computed('model._request.{dimensions.[],metrics.[],intervals.firstObject.interval}', function() {
     let request = get(this, 'request');
     return request && chartTypeForRequest(request);
   }),

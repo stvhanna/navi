@@ -28,7 +28,7 @@ moduleForComponent('visualization-config/line-chart', 'Integration | Component |
       Component.extend({
         classNames: [ 'mock' ],
         click(){
-          this.sendAction('onUpdateConfig', chartOptions);
+          this.get('onUpdateConfig')(chartOptions);
         }
       }), {instantiate: false}
     );

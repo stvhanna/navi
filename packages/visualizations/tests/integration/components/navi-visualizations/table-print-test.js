@@ -103,8 +103,7 @@ test('it renders', function(assert) {
   assert.ok(this.$('.table-widget').is(':visible'),
     'The table widget component is visible');
 
-  let headers = this.$('.table-header-cell').toArray().map((el) =>
-    this.$(el).text().trim());
+  let headers = this.$('.table-header-cell').toArray().map(el => el.textContent.trim());
 
   assert.deepEqual(headers, [
     'Date',

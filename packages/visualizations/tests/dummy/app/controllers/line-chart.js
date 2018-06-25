@@ -3,6 +3,7 @@ import { Promise } from 'rsvp';
 import { A } from '@ember/array';
 import Controller from '@ember/controller';
 import { set, get, computed } from '@ember/object';
+
 export default Controller.extend({
   chartType: 'line-chart',
 

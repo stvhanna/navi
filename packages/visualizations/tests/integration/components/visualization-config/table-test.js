@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { getOwner } from '@ember/application';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
@@ -48,7 +49,7 @@ test('table config - feature flag set', function(assert) {
     'Totals',
     'The header text is displayed correctly');
 
-  assert.deepEqual(this.$('.table-config__totals-toggle-label').toArray().map(el => $(el).text().trim()), [
+  assert.deepEqual(this.$('.table-config__totals-toggle-label').toArray().map(el => el.textContent.trim()), [
     'Grand Total', 'Subtotal'
   ], 'The totals toggle is displayed when the feature flag is set');
 

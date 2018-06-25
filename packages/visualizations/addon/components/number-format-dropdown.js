@@ -12,8 +12,8 @@
 import Component from '@ember/component';
 import layout from '../templates/components/number-format-dropdown';
 import { assign } from '@ember/polyfills';
-import { get, oneWay } from '@ember/object/computed';
-import { getWithDefault } from '@ember/object';
+import { oneWay } from '@ember/object/computed';
+import { get, getWithDefault } from '@ember/object';
 
 export default Component.extend({
   layout,

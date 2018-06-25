@@ -151,8 +151,7 @@ test('it renders', function(assert) {
   assert.ok(this.$('.table-widget').is(':visible'),
     'The table widget component is visible');
 
-  let headers = this.$('.table-header-cell').toArray().map((el) =>
-    this.$(el).text().trim());
+  let headers = this.$('.table-header-cell').toArray().map(el => el.textContent.trim());
 
   assert.deepEqual(headers, [
     'Date',
@@ -311,7 +310,7 @@ test('subtotals in table', function(assert) {
 
   this.render(TEMPLATE);
 
-  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => $(el).text().replace(/\s+/g, ' ').trim()),[
+  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
     'Subtotal All Other 345,867,576 7,339,656,714 0.00',
     'Subtotal Android 183,206,656 4,088,487,125 0.00',
     'Subtotal BlackBerry OS 183,380,921 4,024,700,302 0.00'
@@ -320,7 +319,7 @@ test('subtotals in table', function(assert) {
   let newOptions = $.extend(true, {}, options, { showTotals: { grandTotal: true }});
   this.set('options', newOptions);
 
-  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => $(el).text().replace(/\s+/g, ' ').trim()),[
+  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
     'Grand Total -- 712,455,153 15,452,844,141 0.00',
     'Subtotal BlackBerry OS 183,380,921 4,024,700,302 0.00',
     'Subtotal Android 183,206,656 4,088,487,125 0.00',
@@ -339,7 +338,7 @@ test('subtotals by date in table', function(assert) {
 
   this.render(TEMPLATE);
 
-  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => $(el).text().replace(/\s+/g, ' ').trim()),[
+  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
     'Subtotal -- 539,521,365 11,783,015,784 0.00',
     'Subtotal -- 172,933,788 3,669,828,357 0.00'
   ],'The subtotal rows are visible for each group of the specified subtotal in the options');
@@ -381,7 +380,7 @@ test('totals and subtotals for partial data', function(assert) {
   this.set('options', options);
   this.render(TEMPLATE);
 
-  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => $(el).text().replace(/\s+/g, ' ').trim()),[
+  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
     'Subtotal All Other -- -- --',
     'Subtotal Android -- -- --',
     'Subtotal BlackBerry OS -- -- --',
@@ -432,4 +431,3 @@ test('table header cell display name', function (assert) {
   assert.ok(this.$('.table-header-cell:contains(Date)').is(':visible'),
     'Date should be shown as title in dateTime field');
 });
-

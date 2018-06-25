@@ -15,7 +15,13 @@ moduleForComponent('visualization-config/wrapper', 'Integration | Component | vi
   integration: true,
   beforeEach() {
     //mocking viz-config component
-    this.register('component:visualization-config/mock', Component.extend({classNames: [ 'mock' ], click(){ this.sendAction('onUpdateConfig', 'foo'); }}), {instantiate: false});
+    this.register('component:visualization-config/mock',
+      Component.extend({
+        classNames: [ 'mock' ],
+        click(){
+          this.get('onUpdateConfig')('foo');
+        }
+      }), {instantiate: false});
 
     this.set('visualization', {
       type: 'mock',

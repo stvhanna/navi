@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { A } from '@ember/array';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
@@ -248,7 +249,7 @@ test('Deleting only available series allows you to select it', function(assert) 
   $('.add-series .btn-add').click();
 
   let body = $('.table-body .table-cell:not(.table-cell--icon)').toArray().map((el) =>  {
-    return $(el).text().trim();
+    return el.textContent.trim();
   });
 
   assert.deepEqual(body, [
