@@ -12,13 +12,12 @@
  *   {{/series-selector}}
  */
 import { next } from '@ember/runloop';
-
+import { debounce } from '@ember/runloop';
 import $ from 'jquery';
 import { isBlank } from '@ember/utils';
 import Component from '@ember/component';
 import { set, observer, get, computed } from '@ember/object';
 import Search from 'navi-core/utils/search';
-import DebouncedPropertiesMixin from 'ember-debounced-properties/mixin';
 import layout from '../templates/components/series-selector';
 
 /**
@@ -31,23 +30,13 @@ const SCROLL_BUFFER = 20;
  */
 const SCROLL_EVENT = 'scroll.seriesSelectorTable';
 
-export default Component.extend(DebouncedPropertiesMixin, {
+export default Component.extend({
   layout,
 
   /**
    * @property {Array} classNames - Array of class names
    */
   classNames: ['series-selector'],
-
-  /*
-   * @method init
-   * @override
-   */
-  init() {
-    this._super(...arguments);
-    //list of properties to debounce
-    this.set('debouncedProperties', [ 'searchTerm' ]);
-  },
 
   /**
    * @property {Number} searchTermDelay - number of milliseconds to wait for user to stop typing search term
@@ -58,6 +47,8 @@ export default Component.extend(DebouncedPropertiesMixin, {
    * @property {Array} paginatedSeriesData - paginated version of filterSeriesData
    */
   paginatedSeriesData: undefined,
+
+  debouncedSearchTerm: undefined,
 
   /**
    * @property {Array} filteredSeriesData - data filtered by search query
@@ -204,6 +195,10 @@ export default Component.extend(DebouncedPropertiesMixin, {
           this.$('.search input').select();
         });
       }
+    },
+
+    updateSearchTerm(value) {
+      debounce(this, () => { this.set('debouncedSearchTerm', value) }, 1000);
     }
   }
 });

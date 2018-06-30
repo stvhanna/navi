@@ -51,7 +51,6 @@
     "ember-cp-validations": "^3.5.0",
     "ember-data": "~2.12.2",
     "ember-data-model-fragments": "~2.11.5",
-    "ember-debounced-properties": "0.0.5",
     "ember-disable-prototype-extensions": "^1.1.2",
     "ember-export-application-global": "^2.0.0",
     "ember-font-awesome": "3.0.5",

@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import { run } from '@ember/runloop';
 import { A } from '@ember/array';
 import { moduleForComponent, test } from 'ember-qunit';
@@ -148,39 +149,4 @@ test('addSeries Action', function(assert) {
 
   $('.add-series .btn-add').click();
   this.$('.table-body .table-row:first').click();
-});
-
-test('Searching', function(assert) {
-  assert.expect(4);
-
-  this.render(TEMPLATE);
-
-  $('.add-series .btn-add').click();
-
-  assert.ok(this.$('.search.chart-series-14').is(':visible'),
-    'search bar is visible and has correct chart-series class');
-
-  /* == Search "30" == */
-  run(() => {
-    this.$('.search input').val('30').trigger('input').change();
-  });
-
-  let body = $('.table-body .table-cell:not(.table-cell--icon)').toArray().map((el) => el.textContent.trim());
-
-  assert.deepEqual(body, [
-    "20 - 30 (20)", "Chrome (chrome)",
-    "20 - 30 (20)", "Firefox (firefox)",
-  ], 'table body only shows rows that match search term');
-
-  /* == Search "Safari" == */
-  run(() => {
-    this.$('.search input').val('Opera').trigger('input').change();
-  });
-
-  assert.equal(this.$('.table-body .table-cell').length,
-    0,
-    'table body is empty when search has no matching results');
-
-  assert.ok(this.$('.no-match').is(':visible'),
-    'no match message is displayed when search has no matching results');
 });
