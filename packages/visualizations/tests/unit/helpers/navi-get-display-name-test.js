@@ -1,8 +1,8 @@
 import Service from '@ember/service';
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
+import { test } from 'qunit';
+import { moduleFor, setupTest } from 'ember-qunit';
 
-module('Unit | Helper | navi get display name', function(hooks) {
+moduleFor('helper:navi-get-display-name', 'Unit | Helper | navi get display name', function(hooks) {
   setupTest(hooks);
 
   test('display name is returned', function(assert) {
@@ -19,7 +19,7 @@ module('Unit | Helper | navi get display name', function(hooks) {
     });
     this.owner.register('service:bard-metadata', MockService);
 
-    let getDisplayName = this.owner.lookup('helper:navi-get-display-name');
+    let getDisplayName = this.subject();
 
     assert.equal(getDisplayName.compute(['metric', 'pageViews']),
       'Page Views',

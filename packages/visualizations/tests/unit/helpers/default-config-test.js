@@ -1,15 +1,15 @@
 import { run } from '@ember/runloop';
 import { buildTestRequest } from '../../helpers/request';
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
+import { test } from 'qunit';
+import { moduleFor, setupTest } from 'ember-qunit';
 
-module('Unit | Helper | default config', function(hooks) {
+moduleFor('helper:default-config', 'Unit | Helper | default config', function(hooks) {
   setupTest(hooks);
 
   test('default config', function(assert) {
     assert.expect(1);
 
-    let helper = this.owner.lookup('helper:default-config'),
+    let helper = this.subject(),
         rows = [
           { rupees: 999, hp: 0 }
         ],
@@ -33,7 +33,7 @@ module('Unit | Helper | default config', function(hooks) {
   test('bad visualization', function(assert) {
     assert.expect(1);
 
-    let helper = this.owner.lookup('helper:default-config'),
+    let helper = this.subject(),
         rows = [
           { rupees: 999, hp: 0 }
         ],

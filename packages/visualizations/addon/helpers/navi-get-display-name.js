@@ -2,10 +2,9 @@
  * Copyright 2017, Yahoo Holdings Inc.
  * Licensed under the terms of the MIT license. See accompanying LICENSE.md file for terms.
  */
-import { assert } from '@ember/debug';
-
-import { inject as service } from '@ember/service';
 import Helper from '@ember/component/helper';
+import { assert } from '@ember/debug';
+import { inject as service } from '@ember/service';
 import { get } from '@ember/object';
 
 export default Helper.extend({

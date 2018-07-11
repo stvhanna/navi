@@ -2,6 +2,7 @@ import Application from '@ember/application';
 import { run } from '@ember/runloop';
 import { initialize } from 'dummy/initializers/inject-c3-enhancements';
 import { module, test } from 'qunit';
+import destroyApp from '../../helpers/destroy-app';
 
 module('Unit | Initializer | inject c3 enhancements', function(hooks) {
   hooks.beforeEach(function() {
