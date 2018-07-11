@@ -1,7 +1,8 @@
+import $ from 'jquery';
 import { run } from '@ember/runloop';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, fillIn, triggerEvent } from '@ember/test-helpers';
+import { render, fillIn } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | visualization config/goal gauge', function(hooks) {
@@ -38,7 +39,7 @@ module('Integration | Component | visualization config/goal gauge', function(hoo
 
     run(async () => {
       await fillIn('.goal-gauge-config__baseline-input', 1);
-      await triggerEvent('.goal-gauge-config__baseline-input', 'focusout');
+      await $('.goal-gauge-config__baseline-input').focusout();
     });
   });
 
@@ -55,7 +56,7 @@ module('Integration | Component | visualization config/goal gauge', function(hoo
 
     run(async () => {
       await fillIn('.goal-gauge-config__goal-input', 10);
-      await triggerEvent('.goal-gauge-config__goal-input', 'focusout');
+      await $('.goal-gauge-config__goal-input').focusout();
     });
   });
 
@@ -72,7 +73,7 @@ module('Integration | Component | visualization config/goal gauge', function(hoo
 
     run(async () => {
       await fillIn('.goal-gauge-config__label-input', 'bottles');
-      await triggerEvent('.goal-gauge-config__label-input', 'focusout');
+      await $('.goal-gauge-config__label-input').focusout();
     });
   });
 });
