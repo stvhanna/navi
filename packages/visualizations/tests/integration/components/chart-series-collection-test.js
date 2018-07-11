@@ -176,13 +176,13 @@ module('Integration | Component | chart series collection', function(hooks) {
       ['Series 1', 'Series 2'],
       'Collection contains series with appropriate headers');
 
-    let chartSeries = findAll('.chart-series-item')[0],
+    let chartSeries = findAll('.chart-series-item'),
         expectedDims = SELECTED_SERIES_DATA.map( seriesData => {
           return A(seriesData.dimensions).mapBy('dimension.longName');
         }),
         seriesDimensions = [];
 
-    chartSeries.forEach(series => {
+    A(chartSeries).forEach(series => {
       let dims = $(series).find('.dim-type').map(function() {
         return this.textContent.trim();
       }).get();
@@ -200,7 +200,7 @@ module('Integration | Component | chart series collection', function(hooks) {
         }),
         dimensionValues = [];
 
-    chartSeries.forEach(series => {
+    A(chartSeries).forEach(series => {
       let dims = $(series).find('.dim-value').map(function() {
         return this.textContent.trim();
       }).get();

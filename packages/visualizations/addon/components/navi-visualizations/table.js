@@ -12,7 +12,6 @@
  */
 
 import { readOnly, alias } from '@ember/object/computed';
-
 import layout from '../../templates/components/navi-visualizations/table';
 import { formatItemDimension } from '../../helpers/mixed-height-layout';
 import { computed, get, set } from '@ember/object';
