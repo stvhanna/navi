@@ -1,6 +1,5 @@
 import { Promise } from 'rsvp';
 import { A } from '@ember/array';
-import { getOwner } from '@ember/application';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import moment from 'moment';

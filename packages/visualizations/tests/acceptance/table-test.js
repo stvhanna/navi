@@ -18,7 +18,8 @@ module('Acceptance | table', function(hooks) {
       'Total Page Views',
       'Total Page Views WoW'
     ], 'The headers for the table are as specified');
-    return reorder(
+    
+    reorder(
       'mouse',
       '.table-header-cell',
       '.dimension:contains(Operating System)',
@@ -27,6 +28,7 @@ module('Acceptance | table', function(hooks) {
       '.metric:contains(Total Page Views)',
       '.threshold:contains(Total Page Views WoW)'
     );
+    
     assert.deepEqual(find('.table-header-cell__title').toArray().map(el => el.textContent.trim()),[
       'Operating System',
       'Date',

@@ -9,7 +9,6 @@ import {
 } from '../../../../helpers/ember-power-select';
 import { setupMock, teardownMock } from '../../../../helpers/mirage-helper';
 import { get } from '@ember/object';
-import { getOwner } from '@ember/application';
 import { run } from '@ember/runloop';
 
 let MetadataService;

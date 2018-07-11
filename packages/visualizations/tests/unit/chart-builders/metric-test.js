@@ -1,5 +1,5 @@
 import EmberObject, { get } from '@ember/object';
-import { setOwner, getOwner } from '@ember/application';
+import { setOwner } from '@ember/application';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import BuilderClass from 'navi-visualizations/chart-builders/metric';

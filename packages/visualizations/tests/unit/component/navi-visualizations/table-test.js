@@ -2,7 +2,6 @@ import { set } from '@ember/object';
 import { A } from '@ember/array';
 import { helper as buildHelper } from '@ember/component/helper';
 import Component from '@ember/component';
-import { getOwner } from '@ember/application';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { setupMock, teardownMock } from '../../../helpers/mirage-helper';

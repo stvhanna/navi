@@ -1,7 +1,6 @@
 import { set } from '@ember/object';
 import { run } from '@ember/runloop';
 import $ from 'jquery';
-import { getOwner } from '@ember/application';
 import { A } from '@ember/array';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';

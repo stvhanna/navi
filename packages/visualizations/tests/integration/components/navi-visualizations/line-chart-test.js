@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import { Promise } from 'rsvp';
 import { A } from '@ember/array';
-import { getOwner } from '@ember/application';
 import moment from 'moment';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';

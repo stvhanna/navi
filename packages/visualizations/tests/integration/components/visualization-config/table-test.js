@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { getOwner } from '@ember/application';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click, findAll, find } from '@ember/test-helpers';

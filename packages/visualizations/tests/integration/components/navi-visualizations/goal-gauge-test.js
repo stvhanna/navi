@@ -1,5 +1,4 @@
 import { A as arr } from '@ember/array';
-import { getOwner } from '@ember/application';
 import { set } from '@ember/object';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
