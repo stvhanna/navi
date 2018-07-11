@@ -19,7 +19,8 @@
     "build": "ember build",
     "lint:js": "eslint ./*.js addon addon-test-support app config lib server test-support tests",
     "start": "ember serve",
-    "test": "export COVERAGE=true; ember test --test-port 0"
+    "test": "ember test",
+    "test:all": "ember try:each"
   },
   "dependencies": {
     "ember-cli-babel": "^6.11.0",
@@ -30,7 +31,7 @@
     "ember-ajax": "^3.0.0",
     "ember-basic-dropdown": "0.34.0",
     "ember-c3": "0.2.3",
-    "ember-cli": "^3.0.4",
+    "ember-cli": "~3.1.0",
     "ember-cli-autoprefixer": "~0.8.1",
     "ember-cli-code-coverage": "^0.4.1",
     "ember-cli-dependency-checker": "^2.1.1",
@@ -65,7 +66,7 @@
     "ember-radio-button": "^1.2.1",
     "ember-resolver": "^4.0.0",
     "ember-sortable": "^1.10.0",
-    "ember-source": "^3.0.0",
+    "ember-source": "~3.1.0",
     "ember-source-channel-url": "^1.1.0",
     "ember-tether": "^0.4.1",
     "ember-toggle": "^5.2.1",
