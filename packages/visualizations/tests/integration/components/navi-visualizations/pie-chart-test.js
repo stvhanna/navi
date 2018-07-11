@@ -1,6 +1,8 @@
 import { getOwner } from '@ember/application';
 import { A } from '@ember/array';
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render, find, findAll } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { initialize as injectC3Enhancements } from 'navi-visualizations/initializers/inject-c3-enhancements';
 import { setupMock, teardownMock } from '../../../helpers/mirage-helper';
@@ -93,208 +95,210 @@ const Model = A([{
 
 let MetadataService;
 
-moduleForComponent('navi-visualizations/pie-chart', 'Integration | Component | pie chart', {
-  integration: true,
-  beforeEach() {
+module('Integration | Component | pie chart', function(hooks) {
+  setupRenderingTest(hooks);
+
+  hooks.beforeEach(function() {
     injectC3Enhancements();
     this.set('model', Model);
     setupMock();
-    MetadataService = getOwner(this).lookup('service:bard-metadata');
+    MetadataService = this.owner.lookup('service:bard-metadata');
     return MetadataService.loadMetadata();
-  },
-  afterEach() {
+  });
+
+  hooks.afterEach(function() {
     teardownMock();
-  }
-});
-
-test('it renders', function(assert) {
-  assert.expect(4);
-
-  this.set('options', {
-    series: {
-      config: {
-        type: 'dimension',
-        metric: {
-          metric: 'totalPageViews',
-          parameters: {},
-          canonicalName: 'totalPageViews'
-        },
-        dimensionOrder: ['age'],
-        dimensions: [
-          {
-            name: 'All Other',
-            values: {age: '-3'}
-          },
-          {
-            name: 'Under 13',
-            values: {age: '1'}
-          }
-        ]
-      }
-    }
-  });
-  this.render(TEMPLATE);
-
-  assert.ok(this.$('.navi-vis-c3-chart').is(':visible'),
-    'The pie chart widget component is visible');
-
-  assert.equal(this.$('.c3-chart-arc').length,
-    2,
-    'Two pie slices are present on the chart');
-
-  assert.equal(this.$('.c3-target-All-Other text').text().trim(),
-    '59.72%',
-    'Percentage label shown on slice is formatted properly for `All Other`');
-
-  assert.equal(this.$('.c3-target-Under-13 text').text().trim(),
-    '40.28%',
-    'Percentage label shown on slice is formatted properly for `Under 13`');
-});
-
-test('metric label', function(assert) {
-  assert.expect(6);
-
-  this.set('options', {
-    series: {
-      config: {
-        type: 'dimension',
-        metric: {
-          metric: 'totalPageViews',
-          parameters: {},
-          canonicalName: 'totalPageViews'
-        },
-        dimensionOrder: ['age'],
-        dimensions: [
-          {
-            name: 'All Other',
-            values: {age: '-3'}
-          },
-          {
-            name: 'Under 13',
-            values: {age: '1'}
-          }
-        ]
-      }
-    }
   });
 
-  this.render(TEMPLATE);
+  test('it renders', async function(assert) {
+    assert.expect(4);
 
-  assert.equal(this.$('.c3-title').text(),
-    'Total Page Views',
-    'The metric name is displayed in the metric label correctly');
-
-  //Calulate where the metric label should be relative to the pie chart
-  let chartElm = this.$('.c3-chart-arcs'),
-      xTranslate  = d3.transform(chartElm.attr('transform')).translate[0] - (chartElm[0].getBoundingClientRect().width / 2) - 50,
-      yTranslate  = this.$('svg').css('height').replace('px', '') / 2;
-
-  assert.equal(Math.round(d3.transform(this.$('.c3-title').attr('transform')).translate[0]),
-    Math.round(xTranslate),
-    'The metric name is in the correct X position on initial render');
-
-  assert.equal(Math.round(d3.transform(this.$('.c3-title').attr('transform')).translate[1]),
-    Math.round(yTranslate),
-    'The metric name is in the correct Y position on initial render');
-
-  /*
-   * Resize the parent element of the SVG that the pie chart is drawn in
-   * This effectively moves the pie chart to the left
-   */
-  this.$('.pie-chart-widget').css('max-width', '1000px');
-
-  //Rerender with a new metric and new chart position
-  this.set('options', {
-    series: {
-      config: {
-        type: 'dimension',
-        metric: {
-          metric: 'uniqueIdentifier',
-          parameters: {},
-          canonicalName: 'uniqueIdentifier'
-        },
-        dimensionOrder: ['age'],
-        dimensions: [
-          {
-            name: 'All Other',
-            values: {age: '-3'}
+    this.set('options', {
+      series: {
+        config: {
+          type: 'dimension',
+          metric: {
+            metric: 'totalPageViews',
+            parameters: {},
+            canonicalName: 'totalPageViews'
           },
-          {
-            name: 'Under 13',
-            values: {age: '1'}
-          }
-        ]
+          dimensionOrder: ['age'],
+          dimensions: [
+            {
+              name: 'All Other',
+              values: {age: '-3'}
+            },
+            {
+              name: 'Under 13',
+              values: {age: '1'}
+            }
+          ]
+        }
       }
-    }
+    });
+    await render(TEMPLATE);
+
+    assert.ok(this.$('.navi-vis-c3-chart').is(':visible'),
+      'The pie chart widget component is visible');
+
+    assert.equal(findAll('.c3-chart-arc').length,
+      2,
+      'Two pie slices are present on the chart');
+
+    assert.equal(find('.c3-target-All-Other text').textContent.trim(),
+      '59.72%',
+      'Percentage label shown on slice is formatted properly for `All Other`');
+
+    assert.equal(find('.c3-target-Under-13 text').textContent.trim(),
+      '40.28%',
+      'Percentage label shown on slice is formatted properly for `Under 13`');
   });
 
-  //Recalculate these after the chart is rerendered
-  chartElm = this.$('.c3-chart-arcs');
-  xTranslate = d3.transform(chartElm.attr('transform')).translate[0] - (chartElm[0].getBoundingClientRect().width / 2) - 50;
-  yTranslate = this.$('svg').css('height').replace('px', '') / 2;
+  test('metric label', async function(assert) {
+    assert.expect(6);
 
-  assert.equal(this.$('.c3-title').text(),
-    'Unique Identifiers',
-    'The metric label is updated after the metric is changed');
-
-  assert.equal(Math.round(d3.transform(this.$('.c3-title').attr('transform')).translate[0]),
-    Math.round(xTranslate),
-    'The metric name is in the correct X position after the pie chart moves');
-
-  assert.equal(Math.round(d3.transform(this.$('.c3-title').attr('transform')).translate[1]),
-    Math.round(yTranslate),
-    'The metric name is in the correct Y position after the pie chart moves');
-});
-
-test('parameterized metric renders correctly', function(assert) {
-  assert.expect(5);
-
-  this.set('options', {
-    series: {
-      config: {
-        type: 'dimension',
-        metric: {
-          metric: 'revenue',
-          parameters: {
-            currency: 'USD'
+    this.set('options', {
+      series: {
+        config: {
+          type: 'dimension',
+          metric: {
+            metric: 'totalPageViews',
+            parameters: {},
+            canonicalName: 'totalPageViews'
           },
-          canonicalName: 'revenue(currency=USD)'
-        },
-        dimensionOrder: ['age'],
-        dimensions: [
-          {
-            name: 'All Other',
-            values: {age: '-3'}
-          },
-          {
-            name: 'Under 13',
-            values: {age: '1'}
-          }
-        ]
+          dimensionOrder: ['age'],
+          dimensions: [
+            {
+              name: 'All Other',
+              values: {age: '-3'}
+            },
+            {
+              name: 'Under 13',
+              values: {age: '1'}
+            }
+          ]
+        }
       }
-    }
+    });
+
+    await render(TEMPLATE);
+
+    assert.equal(find('.c3-title').textContent,
+      'Total Page Views',
+      'The metric name is displayed in the metric label correctly');
+
+    //Calulate where the metric label should be relative to the pie chart
+    let chartElm = this.$('.c3-chart-arcs'),
+        xTranslate  = d3.transform(chartElm.attr('transform')).translate[0] - (chartElm[0].getBoundingClientRect().width / 2) - 50,
+        yTranslate  = this.$('svg').css('height').replace('px', '') / 2;
+
+    assert.equal(Math.round(d3.transform(find('.c3-title').getAttribute('transform')).translate[0]),
+      Math.round(xTranslate),
+      'The metric name is in the correct X position on initial render');
+
+    assert.equal(Math.round(d3.transform(find('.c3-title').getAttribute('transform')).translate[1]),
+      Math.round(yTranslate),
+      'The metric name is in the correct Y position on initial render');
+
+    /*
+     * Resize the parent element of the SVG that the pie chart is drawn in
+     * This effectively moves the pie chart to the left
+     */
+    this.$('.pie-chart-widget').css('max-width', '1000px');
+
+    //Rerender with a new metric and new chart position
+    this.set('options', {
+      series: {
+        config: {
+          type: 'dimension',
+          metric: {
+            metric: 'uniqueIdentifier',
+            parameters: {},
+            canonicalName: 'uniqueIdentifier'
+          },
+          dimensionOrder: ['age'],
+          dimensions: [
+            {
+              name: 'All Other',
+              values: {age: '-3'}
+            },
+            {
+              name: 'Under 13',
+              values: {age: '1'}
+            }
+          ]
+        }
+      }
+    });
+
+    //Recalculate these after the chart is rerendered
+    chartElm = this.$('.c3-chart-arcs');
+    xTranslate = d3.transform(chartElm.attr('transform')).translate[0] - (chartElm[0].getBoundingClientRect().width / 2) - 50;
+    yTranslate = this.$('svg').css('height').replace('px', '') / 2;
+
+    assert.equal(find('.c3-title').textContent,
+      'Unique Identifiers',
+      'The metric label is updated after the metric is changed');
+
+    assert.equal(Math.round(d3.transform(find('.c3-title').getAttribute('transform')).translate[0]),
+      Math.round(xTranslate),
+      'The metric name is in the correct X position after the pie chart moves');
+
+    assert.equal(Math.round(d3.transform(find('.c3-title').getAttribute('transform')).translate[1]),
+      Math.round(yTranslate),
+      'The metric name is in the correct Y position after the pie chart moves');
   });
 
-  this.render(TEMPLATE);
+  test('parameterized metric renders correctly', async function(assert) {
+    assert.expect(5);
 
-  assert.equal(this.$('.c3-title').text(),
-    'Revenue (USD)',
-    'The metric name is displayed in the metric label correctly');
+    this.set('options', {
+      series: {
+        config: {
+          type: 'dimension',
+          metric: {
+            metric: 'revenue',
+            parameters: {
+              currency: 'USD'
+            },
+            canonicalName: 'revenue(currency=USD)'
+          },
+          dimensionOrder: ['age'],
+          dimensions: [
+            {
+              name: 'All Other',
+              values: {age: '-3'}
+            },
+            {
+              name: 'Under 13',
+              values: {age: '1'}
+            }
+          ]
+        }
+      }
+    });
 
-  assert.ok(this.$('.navi-vis-c3-chart').is(':visible'),
-    'The pie chart widget component is visible');
+    await render(TEMPLATE);
 
-  assert.equal(this.$('.c3-chart-arc').length,
-    2,
-    'Two pie slices are present on the chart');
+    assert.equal(find('.c3-title').textContent,
+      'Revenue (USD)',
+      'The metric name is displayed in the metric label correctly');
 
-  assert.equal(this.$('.c3-target-All-Other text').text().trim(),
-    '40.00%',
-    'Percentage label shown on slice is formatted properly for `All Other`');
+    assert.ok(this.$('.navi-vis-c3-chart').is(':visible'),
+      'The pie chart widget component is visible');
 
-  assert.equal(this.$('.c3-target-Under-13 text').text().trim(),
-    '60.00%',
-    'Percentage label shown on slice is formatted properly for `Under 13`');
+    assert.equal(findAll('.c3-chart-arc').length,
+      2,
+      'Two pie slices are present on the chart');
+
+    assert.equal(find('.c3-target-All-Other text').textContent.trim(),
+      '40.00%',
+      'Percentage label shown on slice is formatted properly for `All Other`');
+
+    assert.equal(find('.c3-target-Under-13 text').textContent.trim(),
+      '60.00%',
+      'Percentage label shown on slice is formatted properly for `Under 13`');
 
 
+  });
 });

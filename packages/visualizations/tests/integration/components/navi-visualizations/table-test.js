@@ -3,7 +3,9 @@ import { run } from '@ember/runloop';
 import $ from 'jquery';
 import { getOwner } from '@ember/application';
 import { A } from '@ember/array';
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render, click, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { startMirage } from 'dummy/initializers/ember-cli-mirage';
 
@@ -127,307 +129,309 @@ const Options = {
   ]
 };
 
-moduleForComponent('navi-visualizations/table', 'Integration | Component | table', {
-  integration: true,
-  beforeEach() {
+module('Integration | Component | table', function(hooks) {
+  setupRenderingTest(hooks);
+
+  hooks.beforeEach(function() {
     this.server = startMirage();
 
     this.set('model', Model);
     this.set('options', Options);
     this.set('onUpdateReport', () => {});
 
-    return getOwner(this).lookup('service:bard-metadata').loadMetadata();
-  },
-  afterEach() {
+    return this.owner.lookup('service:bard-metadata').loadMetadata();
+  });
+
+  hooks.afterEach(function() {
     this.server.shutdown();
-  }
-});
-
-test('it renders', function(assert) {
-  assert.expect(3);
-
-  this.render(TEMPLATE);
-
-  assert.ok(this.$('.table-widget').is(':visible'),
-    'The table widget component is visible');
-
-  let headers = this.$('.table-header-cell').toArray().map(el => el.textContent.trim());
-
-  assert.deepEqual(headers, [
-    'Date',
-    'Operating System',
-    'Unique Identifiers',
-    'Total Page Views',
-    "Platform Revenue (USD)"
-  ], 'The table renders the headers correctly based on the request');
-
-  let body = this.$('.table-body .table-row' ).toArray().map((row) =>
-    this.$(row).find('.table-cell-content').toArray().map((cell) =>
-      this.$(cell).text().trim()));
-
-  assert.deepEqual(body, [
-    ['05/30/2016','All Other','172,933,788','3,669,828,357', '--'],
-    ['06/10/2016','All Other','172,933,788','3,669,828,357', '--'],
-    ['05/30/2016','Android','183,206,656','4,088,487,125', '--'],
-    ['05/30/2016','BlackBerry OS','183,380,921','4,024,700,302', '--'],
-    ['05/30/2016','Chrome OS','180,559,793','3,950,276,031', '--'],
-    ['05/30/2016','Firefox OS','172,724,594','3,697,156,058', '--'],
-    ['05/30/2016','Apple Mac OS X','152,298,735','3,008,425,744', '--'],
-    ['05/30/2016','Unknown','155,191,081','3,072,620,639', '--']
-  ], 'The table renders the response dataset correctly');
-});
-
-test('onUpdateReport', function(assert) {
-  assert.expect(9);
-
-  this.set('options',
-    $.extend(true, {}, Options, { columns: [
-      {
-        field: 'dateTime',
-        type: 'dateTime',
-        displayName: 'Date'
-      },
-      {
-        field: {dimension: 'os'},
-        type: 'dimension',
-        displayName: 'Operating System'
-      },
-      {
-        field: {metric: 'uniqueIdentifier', parameters: {}},
-        type: 'metric',
-        displayName: 'Unique Identifiers'
-      },
-      {
-        field: {metric: 'totalPageViews', parameters: {}},
-        type: 'metric',
-        displayName: 'Total Page Views'
-      },
-      {
-        field: {metric: 'platformRevenue', parameters: { currency: 'USD'}},
-        type: 'metric',
-        displayName: 'Platform Revenue (USD)'
-      },
-      {
-        field: {metric: 'totalPageViewsWoW', parameters: {}},
-        type: 'threshold',
-        displayName: 'Total Page Views WoW'
-      }]}
-    )
-  );
-
-  this.set('onUpdateReport', () => {
-    assert.notok(true,
-      'onUpdateReport should not be called when a dimension header is clicked');
   });
 
-  this.render(TEMPLATE);
-  this.$('.table-header-cell.dimension').click();
+  test('it renders', async function(assert) {
+    assert.expect(3);
 
-  this.set('onUpdateReport', (actionType, metricName, direction) => {
-    assert.equal(actionType,
-      'upsertSort',
-      'the action type is `upsertSort`');
+    await render(TEMPLATE);
 
-    assert.equal(metricName,
-      'dateTime',
-      'The dateTime field is passed along when the dateTime header is clicked');
+    assert.ok(this.$('.table-widget').is(':visible'),
+      'The table widget component is visible');
 
-    assert.equal(direction,
-      'asc',
-      'The asc direction is passed along when the dateTime header is clicked');
+    let headers = this.$('.table-header-cell').toArray().map(el => el.textContent.trim());
+
+    assert.deepEqual(headers, [
+      'Date',
+      'Operating System',
+      'Unique Identifiers',
+      'Total Page Views',
+      "Platform Revenue (USD)"
+    ], 'The table renders the headers correctly based on the request');
+
+    let body = this.$('.table-body .table-row' ).toArray().map((row) =>
+      this.$(row).find('.table-cell-content').toArray().map((cell) =>
+        this.$(cell).text().trim()));
+
+    assert.deepEqual(body, [
+      ['05/30/2016','All Other','172,933,788','3,669,828,357', '--'],
+      ['06/10/2016','All Other','172,933,788','3,669,828,357', '--'],
+      ['05/30/2016','Android','183,206,656','4,088,487,125', '--'],
+      ['05/30/2016','BlackBerry OS','183,380,921','4,024,700,302', '--'],
+      ['05/30/2016','Chrome OS','180,559,793','3,950,276,031', '--'],
+      ['05/30/2016','Firefox OS','172,724,594','3,697,156,058', '--'],
+      ['05/30/2016','Apple Mac OS X','152,298,735','3,008,425,744', '--'],
+      ['05/30/2016','Unknown','155,191,081','3,072,620,639', '--']
+    ], 'The table renders the response dataset correctly');
   });
 
-  this.$('.table-header-cell.dateTime').click();
+  test('onUpdateReport', async function(assert) {
+    assert.expect(9);
 
-  this.set('onUpdateReport', (actionType, metricName, direction) => {
-    assert.equal(actionType,
-      'upsertSort',
-      'the action type is `upsertSort`');
+    this.set('options',
+      $.extend(true, {}, Options, { columns: [
+        {
+          field: 'dateTime',
+          type: 'dateTime',
+          displayName: 'Date'
+        },
+        {
+          field: {dimension: 'os'},
+          type: 'dimension',
+          displayName: 'Operating System'
+        },
+        {
+          field: {metric: 'uniqueIdentifier', parameters: {}},
+          type: 'metric',
+          displayName: 'Unique Identifiers'
+        },
+        {
+          field: {metric: 'totalPageViews', parameters: {}},
+          type: 'metric',
+          displayName: 'Total Page Views'
+        },
+        {
+          field: {metric: 'platformRevenue', parameters: { currency: 'USD'}},
+          type: 'metric',
+          displayName: 'Platform Revenue (USD)'
+        },
+        {
+          field: {metric: 'totalPageViewsWoW', parameters: {}},
+          type: 'threshold',
+          displayName: 'Total Page Views WoW'
+        }]}
+      )
+    );
 
-    assert.deepEqual(metricName,
-      'totalPageViews',
-      'The totalPageViews metric is passed along when the dateTime header is clicked');
+    this.set('onUpdateReport', () => {
+      assert.notok(true,
+        'onUpdateReport should not be called when a dimension header is clicked');
+    });
 
-    assert.equal(direction,
-      'desc',
-      'The desc direction is passed along when the dateTime header is clicked');
+    await render(TEMPLATE);
+    await click('.table-header-cell.dimension');
+
+    this.set('onUpdateReport', (actionType, metricName, direction) => {
+      assert.equal(actionType,
+        'upsertSort',
+        'the action type is `upsertSort`');
+
+      assert.equal(metricName,
+        'dateTime',
+        'The dateTime field is passed along when the dateTime header is clicked');
+
+      assert.equal(direction,
+        'asc',
+        'The asc direction is passed along when the dateTime header is clicked');
+    });
+
+    await click('.table-header-cell.dateTime');
+
+    this.set('onUpdateReport', (actionType, metricName, direction) => {
+      assert.equal(actionType,
+        'upsertSort',
+        'the action type is `upsertSort`');
+
+      assert.deepEqual(metricName,
+        'totalPageViews',
+        'The totalPageViews metric is passed along when the dateTime header is clicked');
+
+      assert.equal(direction,
+        'desc',
+        'The desc direction is passed along when the dateTime header is clicked');
+    });
+
+    this.$('.table-header-cell.metric:contains(Total Page Views)').click();
+
+    this.set('onUpdateReport', (actionType, metricName, direction) => {
+      assert.equal(actionType,
+        'upsertSort',
+        'the action type is `upsertSort`');
+
+      assert.deepEqual(metricName,
+        'totalPageViewsWoW',
+        'The totalPageViewsWoW metric is passed along when the dateTime header is clicked');
+
+      assert.equal(direction,
+        'desc',
+        'The desc direction is passed along when the dateTime header is clicked');
+    });
+
+    this.$('.table-header-cell.threshold:contains(Total Page Views WoW)').click();
   });
 
-  this.$('.table-header-cell.metric:contains(Total Page Views)').click();
+  test('grand total in table', async function(assert) {
+    assert.expect(3);
 
-  this.set('onUpdateReport', (actionType, metricName, direction) => {
-    assert.equal(actionType,
-      'upsertSort',
-      'the action type is `upsertSort`');
+    let options = $.extend(true, {}, Options, { showTotals: { grandTotal: true }});
+    this.set('options', options);
 
-    assert.deepEqual(metricName,
-      'totalPageViewsWoW',
-      'The totalPageViewsWoW metric is passed along when the dateTime header is clicked');
+    await render(TEMPLATE);
 
-    assert.equal(direction,
-      'desc',
-      'The desc direction is passed along when the dateTime header is clicked');
+    assert.ok(this.$('.table-row__total-row').is(':visible'),
+      'The total row is visible when show grand total is `true`');
+
+    let totalRow = this.$('.table-row__total-row .table-cell-content').toArray().map((cell) =>
+      this.$(cell).text().trim());
+
+    assert.deepEqual(totalRow, [
+      'Grand Total', '--', '1,373,229,356', '29,181,322,613', '0.00'
+    ], 'The table renders the grand total row correctly');
+
+    //Turn off the flag
+    run(() => {
+      set(options, 'showTotals.grandTotal', false);
+    });
+
+    assert.notOk(this.$('.table-row__total-row').is(':visible'),
+      'The total row is not visible when show grand total is `false`');
   });
 
-  this.$('.table-header-cell.threshold:contains(Total Page Views WoW)').click();
-});
+  test('subtotals in table', async function(assert) {
+    assert.expect(2);
 
-test('grand total in table', function(assert) {
-  assert.expect(3);
+    let options = $.extend(true, {}, Options, { showTotals: { subtotal: 'os' }});
 
-  let options = $.extend(true, {}, Options, { showTotals: { grandTotal: true }});
-  this.set('options', options);
+    Model[0].response.rows = ROWS.slice(0,4);
+    this.set('model', Model);
+    this.set('options', options);
 
-  this.render(TEMPLATE);
+    await render(TEMPLATE);
 
-  assert.ok(this.$('.table-row__total-row').is(':visible'),
-    'The total row is visible when show grand total is `true`');
+    assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
+      'Subtotal All Other 345,867,576 7,339,656,714 0.00',
+      'Subtotal Android 183,206,656 4,088,487,125 0.00',
+      'Subtotal BlackBerry OS 183,380,921 4,024,700,302 0.00'
+    ],'The subtotal rows are visible for each group of the specified subtotal in the options');
 
-  let totalRow = this.$('.table-row__total-row .table-cell-content').toArray().map((cell) =>
-    this.$(cell).text().trim());
+    let newOptions = $.extend(true, {}, options, { showTotals: { grandTotal: true }});
+    this.set('options', newOptions);
 
-  assert.deepEqual(totalRow, [
-    'Grand Total', '--', '1,373,229,356', '29,181,322,613', '0.00'
-  ], 'The table renders the grand total row correctly');
-
-  //Turn off the flag
-  run(() => {
-    set(options, 'showTotals.grandTotal', false);
+    assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
+      'Grand Total -- 712,455,153 15,452,844,141 0.00',
+      'Subtotal BlackBerry OS 183,380,921 4,024,700,302 0.00',
+      'Subtotal Android 183,206,656 4,088,487,125 0.00',
+      'Subtotal All Other 345,867,576 7,339,656,714 0.00'
+    ],'The total rows including grandTotal are visible along with the subtotals');
   });
 
-  assert.notOk(this.$('.table-row__total-row').is(':visible'),
-    'The total row is not visible when show grand total is `false`');
-});
+  test('subtotals by date in table', async function(assert) {
+    assert.expect(1);
 
-test('subtotals in table', function(assert) {
-  assert.expect(2);
+    let options = $.extend(true, {}, Options, { showTotals: { subtotal: 'dateTime' }});
 
-  let options = $.extend(true, {}, Options, { showTotals: { subtotal: 'os' }});
+    Model[0].response.rows = ROWS.slice(0,4);
+    this.set('model', Model);
+    this.set('options', options);
 
-  Model[0].response.rows = ROWS.slice(0,4);
-  this.set('model', Model);
-  this.set('options', options);
+    await render(TEMPLATE);
 
-  this.render(TEMPLATE);
+    assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
+      'Subtotal -- 539,521,365 11,783,015,784 0.00',
+      'Subtotal -- 172,933,788 3,669,828,357 0.00'
+    ],'The subtotal rows are visible for each group of the specified subtotal in the options');
+  });
 
-  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
-    'Subtotal All Other 345,867,576 7,339,656,714 0.00',
-    'Subtotal Android 183,206,656 4,088,487,125 0.00',
-    'Subtotal BlackBerry OS 183,380,921 4,024,700,302 0.00'
-  ],'The subtotal rows are visible for each group of the specified subtotal in the options');
+  test('table row info', async function(assert) {
+    assert.expect(1);
 
-  let newOptions = $.extend(true, {}, options, { showTotals: { grandTotal: true }});
-  this.set('options', newOptions);
-
-  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
-    'Grand Total -- 712,455,153 15,452,844,141 0.00',
-    'Subtotal BlackBerry OS 183,380,921 4,024,700,302 0.00',
-    'Subtotal Android 183,206,656 4,088,487,125 0.00',
-    'Subtotal All Other 345,867,576 7,339,656,714 0.00'
-  ],'The total rows including grandTotal are visible along with the subtotals');
-});
-
-test('subtotals by date in table', function(assert) {
-  assert.expect(1);
-
-  let options = $.extend(true, {}, Options, { showTotals: { subtotal: 'dateTime' }});
-
-  Model[0].response.rows = ROWS.slice(0,4);
-  this.set('model', Model);
-  this.set('options', options);
-
-  this.render(TEMPLATE);
-
-  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
-    'Subtotal -- 539,521,365 11,783,015,784 0.00',
-    'Subtotal -- 172,933,788 3,669,828,357 0.00'
-  ],'The subtotal rows are visible for each group of the specified subtotal in the options');
-});
-
-test('table row info', function(assert) {
-  assert.expect(1);
-
-  let model = $.extend(true, {}, Model, [{ response: {
-    meta: {
-      pagination: {
-        numberOfResults: 10
-      }
-    }
-  }}]);
-
-  this.set('model', model);
-  this.render(TEMPLATE);
-
-  assert.equal(this.$('.table-widget__row-info').text().replace(/\s+/g, ' ').trim(),
-    '4 out of 10 rows',
-    'The row info is always shown');
-});
-
-test('totals and subtotals for partial data', function(assert) {
-  assert.expect(1);
-
-  Model[0].response.rows = ROWS.slice(0,4);
-  let model = $.extend(true, {}, Model, [{ response: {
-        meta: {
-          pagination: {
-            numberOfResults: 10
-          }
+    let model = $.extend(true, {}, Model, [{ response: {
+      meta: {
+        pagination: {
+          numberOfResults: 10
         }
-      }}]),
-      options = $.extend(true, {}, Options, { showTotals: { grandTotal: true, subtotal: 'os' }});
+      }
+    }}]);
 
-  this.set('model', model);
-  this.set('options', options);
-  this.render(TEMPLATE);
+    this.set('model', model);
+    await render(TEMPLATE);
 
-  assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
-    'Subtotal All Other -- -- --',
-    'Subtotal Android -- -- --',
-    'Subtotal BlackBerry OS -- -- --',
-    'Grand Total -- -- -- --'
-  ],'The metric totals are not calculated when only partial data is displayed in table');
-});
+    assert.equal(find('.table-widget__row-info').textContent.replace(/\s+/g, ' ').trim(),
+      '4 out of 10 rows',
+      'The row info is always shown');
+  });
 
-test('sort icon for a parameterized metric', function(assert) {
-  assert.expect(2);
+  test('totals and subtotals for partial data', async function(assert) {
+    assert.expect(1);
 
-  this.set('model', Model);
-  this.render(TEMPLATE);
+    Model[0].response.rows = ROWS.slice(0,4);
+    let model = $.extend(true, {}, Model, [{ response: {
+          meta: {
+            pagination: {
+              numberOfResults: 10
+            }
+          }
+        }}]),
+        options = $.extend(true, {}, Options, { showTotals: { grandTotal: true, subtotal: 'os' }});
 
-  assert.ok(this.$('.table-header-cell:contains(Platform Revenue) .navi-table-sort-icon--desc').is(':visible'),
-    'The right sort metric is recognized from the alias');
+    this.set('model', model);
+    this.set('options', options);
+    await render(TEMPLATE);
 
-  assert.ok(this.$('.table-header-cell:contains(Unique Identifiers) .navi-table-sort-icon--asc').is(':visible'),
-    'Even if not an alias, the correct sort metric is recognized');
-});
+    assert.deepEqual(this.$('.table-row__total-row').toArray().map(el => el.textContent.replace(/\s+/g, ' ').trim()),[
+      'Subtotal All Other -- -- --',
+      'Subtotal Android -- -- --',
+      'Subtotal BlackBerry OS -- -- --',
+      'Grand Total -- -- -- --'
+    ],'The metric totals are not calculated when only partial data is displayed in table');
+  });
 
-test('table header cell display name', function (assert) {
-  assert.expect(2);
+  test('sort icon for a parameterized metric', async function(assert) {
+    assert.expect(2);
 
-  this.set('options',
-    $.extend(true, {}, Options, {
-      columns: [
-        {
-          field: 'dateTime',
-          type: 'dateTime',
-          displayName: 'Customize Date'
-        }]
-    })
-  );
-  this.render(TEMPLATE);
-  assert.ok(this.$('.table-header-cell:contains(Customize Date)').is(':visible'),
-    'Customize Date should be shown as title in dateTime field');
+    this.set('model', Model);
+    await render(TEMPLATE);
 
-  this.set('options',
-    $.extend(true, {}, Options, {
-      columns: [
-        {
-          field: 'dateTime',
-          type: 'dateTime',
-          displayName: ''
-        }]
-    })
-  );
-  assert.ok(this.$('.table-header-cell:contains(Date)').is(':visible'),
-    'Date should be shown as title in dateTime field');
+    assert.ok(this.$('.table-header-cell:contains(Platform Revenue) .navi-table-sort-icon--desc').is(':visible'),
+      'The right sort metric is recognized from the alias');
+
+    assert.ok(this.$('.table-header-cell:contains(Unique Identifiers) .navi-table-sort-icon--asc').is(':visible'),
+      'Even if not an alias, the correct sort metric is recognized');
+  });
+
+  test('table header cell display name', async function(assert) {
+    assert.expect(2);
+
+    this.set('options',
+      $.extend(true, {}, Options, {
+        columns: [
+          {
+            field: 'dateTime',
+            type: 'dateTime',
+            displayName: 'Customize Date'
+          }]
+      })
+    );
+    await render(TEMPLATE);
+    assert.ok(this.$('.table-header-cell:contains(Customize Date)').is(':visible'),
+      'Customize Date should be shown as title in dateTime field');
+
+    this.set('options',
+      $.extend(true, {}, Options, {
+        columns: [
+          {
+            field: 'dateTime',
+            type: 'dateTime',
+            displayName: ''
+          }]
+      })
+    );
+    assert.ok(this.$('.table-header-cell:contains(Date)').is(':visible'),
+      'Date should be shown as title in dateTime field');
+  });
 });

@@ -1,38 +1,40 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('tooltip-value-formatter', 'helper:tooltip-value-formatter', {
-  integration: true
-});
+module('helper:tooltip-value-formatter', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('makes a call to smart-format-number by default', function(assert) {
-  assert.expect(4);
+  test('makes a call to smart-format-number by default', async function(assert) {
+    assert.expect(4);
 
-  this.set('inputValue', '1234');
-  this.set('metricName', 'testric');
-  this.set('row', {});
+    this.set('inputValue', '1234');
+    this.set('metricName', 'testric');
+    this.set('row', {});
 
-  this.render(hbs`{{tooltip-value-formatter inputValue metricName row}}`);
+    await render(hbs`{{tooltip-value-formatter inputValue metricName row}}`);
 
-  assert.equal(this.$().text().trim(),
-    '1,234',
-    'Formatted number is returned');
+    assert.equal(find('*').textContent.trim(),
+      '1,234',
+      'Formatted number is returned');
 
-  this.set('inputValue', null);
+    this.set('inputValue', null);
 
-  assert.equal(this.$().text().trim(),
-    '',
-    'null returns empty string');
+    assert.equal(find('*').textContent.trim(),
+      '',
+      'null returns empty string');
 
-  this.set('inputValue', undefined);
+    this.set('inputValue', undefined);
 
-  assert.equal(this.$().text().trim(),
-    '',
-    'undefined returns empty string');
+    assert.equal(find('*').textContent.trim(),
+      '',
+      'undefined returns empty string');
 
-  this.set('inputValue', '');
+    this.set('inputValue', '');
 
-  assert.equal(this.$().text().trim(),
-    '',
-    'empty string returns empty string');
+    assert.equal(find('*').textContent.trim(),
+      '',
+      'empty string returns empty string');
+  });
 });

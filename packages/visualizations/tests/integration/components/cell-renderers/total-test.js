@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 const TEMPLATE = hbs`
@@ -23,37 +25,38 @@ const column = {
   displayName: 'Date'
 };
 
-moduleForComponent('cell-renderers/total', 'Integration | Component | cell renderers/total', {
-  integration: true,
-  beforeEach() {
+module('Integration | Component | cell renderers/total', function(hooks) {
+  setupRenderingTest(hooks);
+
+  hooks.beforeEach(async function() {
     this.set('data', data);
     this.set('column', column);
-    this.render(TEMPLATE);
-  }
-});
+    await render(TEMPLATE);
+  });
 
-test('it renders', function(assert) {
-  assert.expect(5);
+  test('it renders', function(assert) {
+    assert.expect(5);
 
-  assert.ok(this.$('.table-cell--total').is(':visible'),
-    'the total cell is rendered');
+    assert.ok(this.$('.table-cell--total').is(':visible'),
+      'the total cell is rendered');
 
-  assert.equal(this.$('.table-cell--total').text().trim(),
-    'Header',
-    'the total cell displays the correct field from the data');
+    assert.equal(find('.table-cell--total').textContent.trim(),
+      'Header',
+      'the total cell displays the correct field from the data');
 
-  assert.notOk(this.$('.table-cell__info-message').is(':visible'),
-    'the info message and icon are not visible ');
+    assert.notOk(this.$('.table-cell__info-message').is(':visible'),
+      'the info message and icon are not visible ');
 
-  this.set('data', $.extend(true, {}, data, {
-    __meta__: {
-      hasPartialData: true
-    }
-  }));
+    this.set('data', $.extend(true, {}, data, {
+      __meta__: {
+        hasPartialData: true
+      }
+    }));
 
-  assert.ok(this.$('.table-cell__info-message').is(':visible'),
-    'the info message is visible when the partial data flag is true');
+    assert.ok(this.$('.table-cell__info-message').is(':visible'),
+      'the info message is visible when the partial data flag is true');
 
-  assert.ok(this.$('.table-cell__info-message--icon').is(':visible'),
-    'the info message icon is visible when the partial data flag is true');
+    assert.ok(this.$('.table-cell__info-message--icon').is(':visible'),
+      'the info message icon is visible when the partial data flag is true');
+  });
 });

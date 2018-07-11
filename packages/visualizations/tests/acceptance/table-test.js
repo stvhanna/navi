@@ -1,15 +1,16 @@
-import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import { click, fillIn, find, visit } from '@ember/test-helpers';
+import { module, test } from 'qunit';
+import { setupApplicationTest } from 'ember-qunit';
 import { clickTrigger } from 'ember-basic-dropdown/test-support/helpers';
 
-moduleForAcceptance('Acceptance | table');
+module('Acceptance | table', function(hooks) {
+  setupApplicationTest(hooks);
 
-test('visiting /table', function(assert) {
-  assert.expect(2);
+  test('visiting /table', async function(assert) {
+    assert.expect(2);
 
-  visit('/table');
+    await visit('/table');
 
-  andThen(function() {
     assert.deepEqual(find('.table-header-cell__title').toArray().map(el => el.textContent.trim()),[
       'Date',
       'Operating System',
@@ -17,9 +18,6 @@ test('visiting /table', function(assert) {
       'Total Page Views',
       'Total Page Views WoW'
     ], 'The headers for the table are as specified');
-  });
-
-  andThen(() => {
     return reorder(
       'mouse',
       '.table-header-cell',
@@ -29,9 +27,6 @@ test('visiting /table', function(assert) {
       '.metric:contains(Total Page Views)',
       '.threshold:contains(Total Page Views WoW)'
     );
-  });
-
-  andThen(() => {
     assert.deepEqual(find('.table-header-cell__title').toArray().map(el => el.textContent.trim()),[
       'Operating System',
       'Date',
@@ -40,18 +35,14 @@ test('visiting /table', function(assert) {
       'Total Page Views WoW'
     ], 'The headers are reordered as specified by the reorder');
   });
-});
 
-test('toggle table editing', function(assert) {
-  assert.expect(6);
+  test('toggle table editing', async function(assert) {
+    assert.expect(6);
 
-  visit('/table');
-  andThen(function() {
+    await visit('/table');
     assert.notOk(find('.table-header-cell__input').is(':visible'), 'Table header edit field should not be visible');
-  });
 
-  click('.table-config__total-toggle-button .x-toggle-btn');
-  andThen(function() {
+    await click('.table-config__total-toggle-button .x-toggle-btn');
     assert.ok(find('.table-header-cell__input').is(':visible'), 'Table header edit field should be visible');
 
     assert.notOk(find('.dateTime .number-format-dropdown__trigger').is(':visible'), 'Datetime field should not have format dropdown trigger');
@@ -61,50 +52,40 @@ test('toggle table editing', function(assert) {
     assert.ok(find('.metric .number-format-dropdown__trigger').is(':visible'), 'Metric field should have format dropdown trigger');
 
     clickTrigger();
-    andThen(function() {
-      assert.ok(find('.number-format-dropdown__container').is(':visible'), 'Table format dropdown should be visible');
-    });
+    assert.ok(find('.number-format-dropdown__container').is(':visible'), 'Table format dropdown should be visible');
   });
-});
 
-test('edit table field', function(assert) {
-  assert.expect(2);
+  test('edit table field', async function(assert) {
+    assert.expect(2);
 
-  visit('/table');
+    await visit('/table');
 
-  click('.table-config__total-toggle-button .x-toggle-btn');
-  fillIn('.dateTime > .table-header-cell__input', 'test');
-  click('.table-config__total-toggle-button .x-toggle-btn');
+    await click('.table-config__total-toggle-button .x-toggle-btn');
+    await fillIn('.dateTime > .table-header-cell__input', 'test');
+    await click('.table-config__total-toggle-button .x-toggle-btn');
 
-  andThen(function() {
-    assert.equal(find('.dateTime > .table-header-cell__title').text().trim(),
+    assert.equal(find('.dateTime > .table-header-cell__title').textContent.trim(),
       'test',
       'DateTime field should have custom name "test"');
-  });
 
-  andThen(function() {
-    assert.ok(find('.dateTime > .table-header-cell__title').hasClass('table-header-cell__title--custom-name'),
+    assert.ok(find('.dateTime > .table-header-cell__title').classList.contains('table-header-cell__title--custom-name'),
       'DateTime field should have custom name class after editing');
   });
-});
 
-test('edit table field - empty title', function(assert) {
-  assert.expect(2);
+  test('edit table field - empty title', async function(assert) {
+    assert.expect(2);
 
-  visit('/table');
+    await visit('/table');
 
-  click('.table-config__total-toggle-button .x-toggle-btn');
-  fillIn('.dateTime > .table-header-cell__input', null);
-  click('.table-config__total-toggle-button .x-toggle-btn');
+    await click('.table-config__total-toggle-button .x-toggle-btn');
+    await fillIn('.dateTime > .table-header-cell__input', null);
+    await click('.table-config__total-toggle-button .x-toggle-btn');
 
-  andThen(function() {
-    assert.equal(find('.dateTime > .table-header-cell__title').text().trim(),
+    assert.equal(find('.dateTime > .table-header-cell__title').textContent.trim(),
       'Date',
       'DateTime field should have the default name "Date"');
-  });
 
-  andThen(function() {
-    assert.notOk(find('.dateTime').hasClass('custom-name'),
+    assert.notOk(find('.dateTime').classList.contains('custom-name'),
       'DateTime field should not have custom name class after removing title');
   });
 });
