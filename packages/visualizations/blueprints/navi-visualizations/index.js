@@ -13,12 +13,11 @@ module.exports = {
     return this.addAddonsToProject({
       packages: [
         { name: 'ember-cli-format-number',      target: '^2.0.0' },
-        { name: 'ember-collection',             target: '1.0.0-alpha.7' },
+        { name: 'ember-collection',             target: '1.0.0-alpha.8' },
         { name: 'ember-composable-helpers',     target: '^2.1.0' },
         { name: 'ember-cp-validations',         target: '3.1.2' },
         { name: 'ember-c3',                     target: '0.2.3' },
-        { name: 'ember-data-model-fragments',   target: '2.11.5' },
-        { name: 'ember-debounced-properties',   target: '0.0.5' },
+        { name: 'ember-data-model-fragments',   target: '2.14.0' },
         { name: 'ember-get-config',             target: '0.2.4' },
         { name: 'ember-lodash',                 target: '4.17.2' },
         { name: 'ember-math-helpers',           target: '2.3.0' },
@@ -30,10 +29,7 @@ module.exports = {
         { name: 'ember-tether',                 target: '0.4.1' },
         { name: 'ember-toggle',                 target: '5.2.1' },
         { name: 'ember-tooltips',               target: '2.9.2' },
-        { name: 'ember-truth-helpers',          target: '2.0.0' },
-        { name: 'navi',                         target: '^8.0.0' },
-        { name: 'navi-data',                    target: '^8.0.0' },
-        { name: 'navi-core',                    target: '^8.0.0' }
+        { name: 'ember-truth-helpers',          target: '2.0.0' }
       ]
     });
   }
