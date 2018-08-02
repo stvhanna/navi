@@ -1,17 +1,3 @@
-<h2 id="title">Welcome to Ember</h2>
-
-{{outlet}}
-
-{{#power-calendar-range
-  classNames='dummy-calendar'
-  center=center
-  selected=range1
-  onCenterChange=(action (mut center) value="date")
-  onSelect=(action (mut range1) value="date") as |calendar|}}
-  {{calendar.nav}}
-  {{calendar.days}}
-{{/power-calendar-range}}
-
 {{#power-calendar-range
   classNames='dummy-calendar'
   center=foo
@@ -27,5 +13,3 @@
   </nav>
   {{calendar.days}}
 {{/power-calendar-range}}
-
-{{power-calendar-months}}
