@@ -28,4 +28,6 @@
   {{calendar.days}}
 {{/power-calendar-range}}
 
-{{power-calendar-months}}
+{{power-calendar-months
+  onSelect=(action (mut currentDate) value="moment")
+}}

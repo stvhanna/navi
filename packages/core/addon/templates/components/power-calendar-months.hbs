@@ -11,5 +11,17 @@
     </div>
     <button class="ember-power-calendar-nav-control" onclick={{action calendar.actions.moveCenter 12 'month'}}>»</button>
   </nav>
-  {{calendar.days}}
+  {{#each thirds as | third |}}
+    <div class="ember-power-calendar-row ember-power-calendar-third">
+      {{#each third as | month | }}
+        <button type="button"
+          class="ember-power-calendar-month {{if month.isSelected "ember-power-calendar-month--selected"}} {{if (eq focusedId month.id) 'ember-power-calendar-month--focused'}}"
+          onfocus={{action "onFocusMonth" month}}
+          onclick={{action "selectMonth" month}}
+        >
+          {{month.name}}
+        </button>
+      {{/each}}
+    </div>
+  {{/each}}
 {{/power-calendar-range}}
